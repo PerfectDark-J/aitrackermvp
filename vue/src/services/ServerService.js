@@ -34,8 +34,8 @@ export default {
         return http.post(`/projects`, project);
     },
     
-    updateProject(project) {
-        return http.put(`/editProject`, project);
+    updateProject(id, project) {
+        return http.put(`/editProject/${id}`, project);
     },
 
     deleteProject(id) {
@@ -65,7 +65,7 @@ export default {
     },
 
     updateTask(task){
-        return http.put('task/', task)
+        return http.put(`/task`, task)
     },
 
     deleteTask(taskId){
@@ -82,8 +82,8 @@ export default {
         return http.get(`/worklog/user/${userId}`)
     },
 
-    getAllReportsForUserByProjectId(userId, projectid){
-        return http.get(`/worklog/${userId}/${projectid}`)
+    getAllReportsForUserByProjectId(userid, projectid){
+        return http.get(`/worklog/${userid}/${projectid}`)
     },
 
     getReportByReportId(reportId){

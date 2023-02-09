@@ -33,11 +33,11 @@
                 v-for="task in filteredList"
                 v-bind:key="task.id"
                 v-bind:class="{ disabled: task.isCompleted===false}">
-                    <td>{{ task.taskTitle }}</td>
-                    <td>{{ task.taskDescription }}</td>
-                    <td>{{ task.taskDueDate }}</td>
+                    <td>{{ task.tasktitle }}</td>
+                    <td>{{ task.taskdescription }}</td>
+                    <td>{{ new Date(task.taskduedate).toLocaleDateString() }}</td>
                     <td>
-                    <button  v-on:click='flipStatus(task.id)' class="btnEComplete" v-if="!task.taskIsCompleted" >Complete</button>
+                    <button  v-on:click='flipStatus(task.id)' class="btnEComplete" v-if="!task.tasksscompleted" >Complete</button>
                     </td>
               </tr>
             </tbody>
@@ -126,14 +126,22 @@ export default {
         flipStatus(id) {
             this.taskList.forEach( (task) => {
                 if(task.id==id){
-                    if(!task.taskIsCompleted){
-                        task.taskIsCompleted=true;;
-                    }else{
-                        task.taskIsCompleted=false;
+                    if(!task.tasksscompleted){
+                        task.tasksscompleted=true;
+                        ServerService.updateTask(task);
                     }
+                    // else{
+                    //     task.taskIsCompleted=false;
+                    // }
                 }
             }
             )
+
+          // let currentTask = ServerService.getAllTasksByTaskId(id);
+          // currentTask.tasksscompleted = !currentTask.tasksscompleted;
+          // ServerService.updateTask(currentTask);
+
+
         },
         dateDifference(today, due){
           let t1 = today.getTime();
@@ -147,24 +155,26 @@ export default {
             let filteredTasks = this.taskList;
             if(!this.filter.taskIsCompleted && this.timeFilter===0){
                 filteredTasks = filteredTasks.filter( (task) => 
-                    !task.taskIsCompleted
+                    !task.tasksscompleted
                 )
             }
-            if(!this.filter.taskIsCompleted&&this.timeFilter===1){
+            if(!this.filter.taskisCompleted&&this.timeFilter===1){
               filteredTasks = filteredTasks.filter( (task) => 
-                this.dateDifference(new Date(), new Date(task.taskDueDate))==0
+                this.dateDifference(new Date(), new Date(task.taskduedate))===-1 
+                && !task.tasksscompleted
+
               )
             }
             if(!this.filter.taskIsCompleted&&this.timeFilter===2){
               filteredTasks = filteredTasks.filter( (task) => 
-                this.dateDifference(new Date(), new Date(task.taskDueDate))<=7 
-                &&this.dateDifference(new Date(), new Date(task.taskDueDate))>0
-                && !task.taskIsCompleted
+                this.dateDifference(new Date(), new Date(task.taskduedate))<7
+                && this.dateDifference(new Date(), new Date(task.taskduedate))>=-1  
+                && !task.tasksscompleted
               )
             }
             if(this.timeFilter===3){
               filteredTasks = filteredTasks.filter( (task) => 
-                task.taskIsCompleted
+                task.tasksscompleted
               )
             }
 

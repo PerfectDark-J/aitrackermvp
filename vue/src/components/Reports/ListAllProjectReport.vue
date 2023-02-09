@@ -24,17 +24,13 @@
         </tr>
     </thead>
     <tbody>
-
         <tr
         v-for="(item, i) in filteredWorkLogs"
         :key="i">
-        <!-- <router-link v-bind:to="{name: 'singleProjectTimeReport', params: {id: item.id}}"> -->
-        <td>{{ item.id }}</td>
-        <td>{{ item.projectTitle }}</td>
-        <td>{{ item.totalTime/60 }} hours</td>
-        <!-- </router-link> -->
+        <td v-on:click="clickRow(item)">{{ item.userid }}</td>
+        <td v-on:click="clickRow(item)">{{ item.projecttitle }}</td>
+        <td v-on:click="clickRow(item)">{{ (item.totaltime/60).toFixed(2) }} hours</td>
         </tr>
-
     </tbody>
     </template>
   </v-table>
@@ -59,13 +55,13 @@ export default {
       date,
       worklogs:[], 
       worklogFilter: {
-        userId: '',
-        clockIn: '',
-        clockOut: '',
-        projectID: '',
-        totalTime: '',
-        addedComment: '',
-        projectTitle: ''
+        userid: '',
+        clockin: '',
+        clockout: '',
+        projectid: '',
+        totaltime: '',
+        addedcomment: '',
+        projecttitle: ''
       },
       search: "",
     }
@@ -83,6 +79,12 @@ export default {
       console.error(error);
     });
   },
+  methods: {
+    clickRow(item) {
+      // navigate to a singleProjectTimeReport, passing the required parameters
+      this.$router.push({ name: 'singleProjectTimeReport', params: { userid: item.userid, projectid: item.projectid } });
+    }
+  },
   computed: {
     filteredWorkLogs() {
         let curatedLogs = this.worklogs;
@@ -91,43 +93,21 @@ export default {
           curatedLogs =  curatedLogs.filter(
               (item) => {
                 console.log(typeof String(this.date[0]))
-                console.log(typeof item.clockIn)
+                console.log(typeof item.clockin)
                 console.log(this.date[0].getFullYear() + "" + (this.date[0].getMonth()+1) + "" + this.date[0].getDate())
                 let dateFromPicker = String(this.date[0].getFullYear());
-                console.log(`Comparison:' + ${dateFromPicker} + " " + ${item.clockIn} + " " + ${dateFromPicker < item.clockIn} `);
-                return dateFromPicker < item.clockIn
+                console.log(`Comparison:' + ${dateFromPicker} + " " + ${item.clockin} + " " + ${dateFromPicker < item.clockin} `);
+                return dateFromPicker < item.clockin
                 // look into a way to add months and days to get the closest comparison possible since it is only dates currently
               });
         }
-        if(this.worklogs.projectTitle != "") {
+        if(this.worklogs.projecttitle != "") {
           curatedLogs = curatedLogs.filter(item => {
-            return item.projectTitle.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+            return item.projecttitle.toLowerCase().indexOf(this.search.toLowerCase()) > -1
           });
         }     
         return curatedLogs;
     },
-    // filteredWorklogs() {
-    //   let filteredList = this.worklogs;
-
-    //   if(this.worklogs.projectTitle != "") {
-    //     filteredList.filter(item => {
-    //       return item.projectTitle.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-    //       });
-    //   }
-    //   // this one might need to be removed since it is only good for managers techincally....
-    //   if(this.worklogs.userId != "") {
-    //     filteredList.filter(item => {
-    //       return item.userId.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-    //       });
-    //   }
-      
-    //   if(this.date != "") {
-    //     filteredList.filter((item) => {
-    //       return item.clockIn <= this.date[0] && item.clockOut >= this.date[1]
-    //       });
-    //   }
-    //   return filteredList;
-    // },
   }
 }
 </script>
