@@ -26,7 +26,7 @@ export function createRouter(app: App): Router {
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: "/projects",
+        path: "/dash",
         name: "dashboard",
         component: Dashboard,
         beforeEnter: createAuthGuard(app)

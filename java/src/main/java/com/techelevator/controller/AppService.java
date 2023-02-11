@@ -84,13 +84,13 @@ public class AppService {
 
     //Projects ********************************************************************
 
-    @GetMapping("/projects")
+    @GetMapping("/dash")
     public List<Project> getAllProjects() {
         return projectDao.getAllProjects();
     }
 
     @CrossOrigin
-    @GetMapping("/projects/{userid}")
+    @GetMapping("/dash/{userid}")
     public List<Project> getProjectByUserId(@PathVariable int userid) {
         return projectDao.getProjectsByUserId(userid);
     }
@@ -101,13 +101,13 @@ public class AppService {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    @PostMapping("/projects")
+    @PostMapping("/dash")
     public ResponseEntity<Object> addProject(@RequestBody Project project) {
         projectDao.addProject(project);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/projects/{id}")
+    @DeleteMapping("/dash/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable int id) {
         projectDao.deleteProject(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -123,24 +123,25 @@ public class AppService {
 
 
     //Tasks *******************************************
-
     @GetMapping("/tasks")
     public List<Task> getAllTasks() {
         return taskDao.getAllTasks();
     }
+
 
 //    @GetMapping("/tasks/{userId}/{projectId}/{taskId}")
 //    public ResponseEntity<Task> getAllTasksByTaskId(@PathVariable int userId, @PathVariable int projectId, @PathVariable int taskId) {
 //        Task task = taskDao.getAllTasksByTaskId(userId, projectId, taskId);
 //        return new ResponseEntity<>(task, HttpStatus.OK);
 //    }
-
+    
     @GetMapping("/task/{taskId}")
     public ResponseEntity<Task> getAllTasksByTaskId(@PathVariable int taskId) {
         Task task = taskDao.getAllTasksByTaskId(taskId);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/singletask/{projectId}")
     public ResponseEntity<List<Task>> getAllTasksByProjectId(@PathVariable int projectId) {
         List<Task> tasks = taskDao.getAllTasksByProjectId(projectId);

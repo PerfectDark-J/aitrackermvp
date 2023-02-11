@@ -1,41 +1,18 @@
 <template>
   <div class="nav-container">
-    <div class="logo-container">
-      <logo-image />
-    </div>
-      <add-task/>
-      <v-col
-    cols="12"
-    sm="6"
-    class="pyx-1 text-center">
-        <v-btn-toggle v-model="timeFilter">
-            <v-btn>All</v-btn>
-            <v-btn>Today</v-btn>
-            <v-btn>Week</v-btn>
-            <v-btn>Done</v-btn>
-        </v-btn-toggle>
-    </v-col>
     <v-card>
-        <v-card-title>
-            Tasks
-        </v-card-title>
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Due Date</th>
-                    <th>Active</th>
+                    <th>Tasks</th>
                 </tr>
             </thead>
             <tbody>
                 <tr
-                v-for="task in filteredList"
+                v-for="task in topFiveTasks"
                 v-bind:key="task.id"
                 v-bind:class="{ disabled: task.isCompleted===false}">
                     <td>{{ task.tasktitle }}</td>
-                    <td>{{ task.taskdescription }}</td>
-                    <td>{{ new Date(task.taskduedate).toLocaleDateString() }}</td>
                     <td>
                     <button  v-on:click='flipStatus(task.id)' class="btnEComplete" v-if="!task.tasksscompleted" >Complete</button>
                     </td>
@@ -43,17 +20,29 @@
             </tbody>
           </table>
         </v-card>
-        
+        <div style="overflow: auto; height: calc(100% - 300px);">
+            <table>
+            <tbody>
+                <tr
+                v-for="task in restOfTasks"
+                v-bind:key="task.id"
+                v-bind:class="{ disabled: task.isCompleted===false}">
+                    <td>{{ task.tasktitle }}</td>
+                    <td>
+                    <button  v-on:click='flipStatus(task.id)' class="btnEComplete" v-if="!task.tasksscompleted" >Complete</button>
+                    </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- <add-task/> -->
   </div>
 </template>
 
 <script>
 import TaskTile from '../components/Dashboard/TaskTile.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
-import LogoImage from '../components/LogoImage.vue';
 import ServerService from '../services/ServerService.js';
-import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
 import AddTask from '../components/AddTask.vue'
 
 
@@ -67,8 +56,7 @@ export default {
         DueDate:''
       },
       timeFilter: null,
-
-      
+      displayLimit: 5,
     }
   },    
   created() {
@@ -78,48 +66,26 @@ export default {
       
       ServerService.getUserByEmail(`${auth0.user.value.email}`)
       .then(response => {
-      const { ismanager, isactivated, userid } = response.data;
+      const { isactivated, userid } = response.data;
+
+      console.log(isactivated)
+      console.log(userid)
+
       if(response.data == null){
         window.location.reload();
       }
-      
-      console.log(response.data)
-      console.log(`isManager: ${ismanager}`);
-      console.log(`isActivated: ${isactivated}`);
-      console.log(`userId: ${userid}`);
       
       if (!isactivated) {
         console.log("User is not activated, logging out");
         auth0.logout({ logoutParams: {
                 returnTo: window.location.origin
-                }})
+                }});
       } 
-      
-      if (!ismanager) {
-          
-          //Get Tasks for User
+
           ServerService.getAllTasksByUserId(`${userid}`).then(response => {
           this.taskList = response.data; 
-          console.log(response.data)
-          })
-          
-
-      } else {
-        
-          //Get All Tasks
-          console.log('Getting ALL Tasks')
-          ServerService.getAllTasks().then(response => {
-          this.taskList = response.data;
           console.log(response.data);
-          
-          })
-          .catch(error => {
-          console.error(error);
           });
-      }
-      })
-      .catch(error => {
-      console.error(error);
       });
   },
   methods: {
@@ -130,61 +96,17 @@ export default {
                         task.tasksscompleted=true;
                         ServerService.updateTask(task);
                     }
-                    // else{
-                    //     task.taskIsCompleted=false;
-                    // }
                 }
-            }
-            )
-
-          // let currentTask = ServerService.getAllTasksByTaskId(id);
-          // currentTask.tasksscompleted = !currentTask.tasksscompleted;
-          // ServerService.updateTask(currentTask);
-
-
+            });
         },
-        dateDifference(today, due){
-          let t1 = today.getTime();
-          let t2 = due.getTime();
- 
-        return Math.floor((t2-t1)/(24*3600*1000));
-        }
     },  
   computed:{
-    filteredList() {
-            let filteredTasks = this.taskList;
-            if(!this.filter.taskIsCompleted && this.timeFilter===0){
-                filteredTasks = filteredTasks.filter( (task) => 
-                    !task.tasksscompleted
-                )
-            }
-            if(!this.filter.taskisCompleted&&this.timeFilter===1){
-              filteredTasks = filteredTasks.filter( (task) => 
-                this.dateDifference(new Date(), new Date(task.taskduedate))===-1 
-                && !task.tasksscompleted
-
-              )
-            }
-            if(!this.filter.taskIsCompleted&&this.timeFilter===2){
-              filteredTasks = filteredTasks.filter( (task) => 
-                this.dateDifference(new Date(), new Date(task.taskduedate))<7
-                && this.dateDifference(new Date(), new Date(task.taskduedate))>=-1  
-                && !task.tasksscompleted
-              )
-            }
-            if(this.timeFilter===3){
-              filteredTasks = filteredTasks.filter( (task) => 
-                task.tasksscompleted
-              )
-            }
-
-            return filteredTasks;
-        }
+    displayedTasks() {
+        return this.taskList.slice(0, this.displayLimit);
+    },
   },
   components: {
     TaskTile,
-    LogoImage,
-    Datepicker,
     AddTask
   },
 };

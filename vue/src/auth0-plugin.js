@@ -20,7 +20,7 @@
   export const useAuth0 = ({
     onRedirectCallback = (appState) => {
       window.history.replaceState({}, document.title, window.location.pathname);
-      window.location.href = 'http://localhost:3000/projects';
+      window.location.href = 'http://localhost:3000/dash';
     },
     redirectUri = window.location.origin,
     ...pluginOptions

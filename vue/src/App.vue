@@ -9,13 +9,6 @@
         </div>   
       </div>    
     </div>
-    <!-- <footer class="bg-light text-center p-3">
-      <div class="logo"></div>
-      <p>
-        Sample project provided by
-        <a href="https://auth0.com">Auth0</a>
-      </p>
-    </footer> -->
   </div>
   
 </template>
@@ -24,7 +17,6 @@
 import { useAuth0 } from '@auth0/auth0-vue';
 import FooterNavBar from './components/FooterNavBar.vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 
 export default {
   components: {
@@ -35,7 +27,8 @@ export default {
     const router = useRouter();
     
     if (auth0.isAuthenticated) {
-      router.push('/projects');
+      //change to push to dash
+      router.push('/dash');
     } 
   }
 };
@@ -51,7 +44,7 @@ body, html {
 #app {
   height: 100vh;
   overflow: auto;
-  background-color: #78b2c6;
+  background-color: #2f719d;
 }
 
 .mt-5 {

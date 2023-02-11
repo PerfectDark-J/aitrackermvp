@@ -53,7 +53,7 @@ export default {
 <style>
 
 #footer {
-    background-color: #78b2c6;
+    background-color: #2f719d;
     /* overflow: hidden; */
     position: sticky;
     bottom: 0;
@@ -75,7 +75,7 @@ export default {
 }
 
 .main-btn {
-  border: 3px solid #78b2c6;
+  border: 3px solid #2f719d;
   display: inline-block;
   text-align: center;
   height: auto;
@@ -83,7 +83,7 @@ export default {
 }
 
 .login-btn-container {
-    background-color: #78b2c6;
+    background-color: #2f719d;
     width: 80%;
     height: 100px;
     display: flex;
