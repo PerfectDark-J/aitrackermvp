@@ -16,7 +16,7 @@ export default {
 <style>
 @media only screen and (max-width: 767px){
     .nav-container {
-        background-color: white;
+        background-color: #2f719d;
         /* overflow: hidden; */
         position: sticky;
         bottom: 0;

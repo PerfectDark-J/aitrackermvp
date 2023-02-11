@@ -11,20 +11,21 @@ public class Task {
     private String taskcompletiondate;
     private int projectid;
 
+    private int userid;
+
     // Constructors
 
     public Task() {
 
     }
 
-    public Task(int id, String tasktitle, String taskdescription, boolean tasksscompleted, String taskduedate, String taskcompletiondate, int projectid) {
+    public Task(int id, String tasktitle, String taskdescription, boolean tasksscompleted, String taskcompletiondate, int userid) {
         this.id = id;
         this.tasktitle = tasktitle;
         this.taskdescription = taskdescription;
         this.tasksscompleted = tasksscompleted;
-        this.taskduedate = taskduedate;
         this.taskcompletiondate = taskcompletiondate;
-        this.projectid = projectid;
+        this.userid = userid;
     }
 
     public int getId() {
@@ -33,6 +34,14 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     public String getTasktitle() {

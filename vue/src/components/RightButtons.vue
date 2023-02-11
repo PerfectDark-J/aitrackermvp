@@ -29,17 +29,17 @@ export default {
 <style scoped>
   .right-component {
     display: flex;
-    align-items: flex-end;
-    padding-top: 50%;
+    align-items: flex-start; /* change this */
+    padding-top: 5%;
   }
 
   .floating-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    position: right;
+    z-index: 1;
+  }
 
   .top-button,
   .middle-button,

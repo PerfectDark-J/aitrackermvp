@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="app">
-      <div class="container flex-grow-1">
+      <div class="container flex-grow-1" style="padding: 0">
         <error />
         <div class="mt-5"> 
           <router-view />
@@ -45,10 +45,12 @@ body, html {
   height: 100vh;
   overflow: auto;
   background-color: #2f719d;
+    overflow: hidden; /* Add this line */
 }
 
 .mt-5 {
   margin-top: 0%;
   /* height: 100vh; */
+  
 } 
 </style>

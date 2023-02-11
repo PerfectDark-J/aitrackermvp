@@ -40,19 +40,19 @@ public class JdbcTaskDao implements TaskDao {
         }
     }
 
-    public List<Task> getTaskByProjectId(int projectId) {
-        String sql = "SELECT * FROM task WHERE projectid = ?";
-        List<Task> taskList = new ArrayList<>();
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, projectId);
-        while (results.next()) {
-            Task task = mapRowToTask(results);
-            taskList.add(task);
-        }
-        return taskList;
-    }
-    public Task getAllTasksByTaskId(int taskId) {
-        String sql = "SELECT * FROM task WHERE taskid = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, taskId);
+//    public List<Task> getTaskByProjectId(int projectId) {
+//        String sql = "SELECT * FROM task WHERE projectid = ?";
+//        List<Task> taskList = new ArrayList<>();
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, projectId);
+//        while (results.next()) {
+//            Task task = mapRowToTask(results);
+//            taskList.add(task);
+//        }
+//        return taskList;
+//    }
+    public Task getAllTasksByUserId(int userid) {
+        String sql = "SELECT * FROM task WHERE userid = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userid);
         if (results.next()) {
             return mapRowToTask(results);
         } else {
@@ -60,16 +60,16 @@ public class JdbcTaskDao implements TaskDao {
         }
     }
 
-    public List<Task> getAllTasksByProjectId(int projectId) {
-        String sql = "SELECT * FROM task WHERE projectid = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, projectId);
-        List<Task> tasks = new ArrayList<>();
-        while (results.next()) {
-            Task task = mapRowToTask(results);
-            tasks.add(task);
-        }
-        return tasks;
-    }
+//    public List<Task> getAllTasksByProjectId(int projectId) {
+//        String sql = "SELECT * FROM task WHERE projectid = ?";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, projectId);
+//        List<Task> tasks = new ArrayList<>();
+//        while (results.next()) {
+//            Task task = mapRowToTask(results);
+//            tasks.add(task);
+//        }
+//        return tasks;
+//    }
 
     public List<Task> getTasksForUserByProjectId(int userId, int projectId) {
         String sql = "SELECT task.* FROM task JOIN project ON task.projectid = project.projectid WHERE project.userid = ? AND project.projectid = ?";
@@ -117,9 +117,8 @@ public class JdbcTaskDao implements TaskDao {
         task.setTasktitle(result.getString("tasktitle"));
         task.setTaskdescription(result.getString("taskdescription"));
         task.setTasksscompleted(result.getBoolean("taskiscompleted"));
-        task.setTaskduedate(result.getString("taskduedate"));
         task.setTaskcompletiondate(result.getString("taskcompletiondate"));
-        task.setProjectid(result.getInt("projectid"));
+        task.setUserid(result.getInt("userid"));
         return task;
     }
 }

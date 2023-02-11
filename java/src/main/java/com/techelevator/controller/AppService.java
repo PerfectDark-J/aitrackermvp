@@ -134,19 +134,19 @@ public class AppService {
 //        Task task = taskDao.getAllTasksByTaskId(userId, projectId, taskId);
 //        return new ResponseEntity<>(task, HttpStatus.OK);
 //    }
-    
-    @GetMapping("/task/{taskId}")
-    public ResponseEntity<Task> getAllTasksByTaskId(@PathVariable int taskId) {
-        Task task = taskDao.getAllTasksByTaskId(taskId);
+
+    @GetMapping("/task/{userid}")
+    public ResponseEntity<Task> getAllTasksByTaskId(@PathVariable int userid) {
+        Task task = taskDao.getAllTasksByUserId(userid);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/singletask/{projectId}")
-    public ResponseEntity<List<Task>> getAllTasksByProjectId(@PathVariable int projectId) {
-        List<Task> tasks = taskDao.getAllTasksByProjectId(projectId);
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
-    }
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    @GetMapping("/singletask/{userid}")
+//    public ResponseEntity<List<Task>> getAllTasksByProjectId(@PathVariable int userid) {
+//        List<Task> tasks = taskDao.getAllTasksByUserId(userid);
+//        return new ResponseEntity<>(tasks, HttpStatus.OK);
+//    }
 
     @PostMapping("/task")
     public ResponseEntity<Void> addTask(@RequestBody Task task) {

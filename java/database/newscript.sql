@@ -12,36 +12,13 @@ CREATE TABLE Users (
     isActivated boolean
 );
 
-CREATE TABLE Project (
-    projectID serial PRIMARY KEY,
-    projectTitle varchar(255),
-    projectDescription varchar(255),
-    projectImg varchar(255),
-    projectIsCompleted boolean,
-    projectDueDate date,
-    projectCompletionDate date,
-    userId integer REFERENCES Users(userId),
-    isShared boolean
-);
-
 CREATE TABLE Task (
     taskid serial PRIMARY KEY,
     tasktitle varchar(255),
     taskdescription varchar(255),
     taskiscompleted boolean,
-    taskduedate varchar(255),
     taskcompletiondate varchar(255),
-    projectid integer REFERENCES Project(projectID)
-);
-
-CREATE TABLE WorkLog (
-    logid serial PRIMARY KEY,
-    userid integer REFERENCES Users(userId),
-    clockin varchar(255),
-    clockout varchar(255),
-    projectid integer REFERENCES Project(projectID),
-    totaltime integer,
-    addedcomment varchar(255)
+    userId integer REFERENCES Users(userId)
 );
 
 COMMIT;
