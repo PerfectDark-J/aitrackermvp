@@ -26,11 +26,13 @@ public class JdbcReportDao implements ReportDao {
 
     public void createReport(Report report) {
 
-        String sql = "INSERT INTO worklog (userid, clockin, clockout, projectid, totaltime, addedcomment) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, report.getUserid(), report.getClockin(), report.getClockout(), report.getProjectid(), report.getTotaltime(), report.getAddedcomment());
-
+        String sql = "INSERT INTO log (content, type, date) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, report.getContent(), report.getType(), report.getDate());
 
     }
+
+
+
 
 
    /* @Override
@@ -39,99 +41,89 @@ public class JdbcReportDao implements ReportDao {
         jdbcTemplate.update(sqlInsertReport, report.getProjectId(), report.getTitle(), report.getDescription(), report.getUserId());
     }*/
 
-    @Override
-    public Report getReportById(int reportId) {
-        String sql = "SELECT * FROM worklog WHERE logid = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, reportId);
-        if(results.next()) {
-            return mapRowToWorkLog(results);
-        } else {
-            return null;
-        }
-    }
+//    @Override
+//    public Report getReportById(int reportId) {
+//        String sql = "SELECT * FROM worklog WHERE logid = ?";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, reportId);
+//        if(results.next()) {
+//            return mapRowToWorkLog(results);
+//        } else {
+//            return null;
+//        }
+//    }
 
-    @Override
-    public List<Report> getReportsByProjectId(int projectId) {
-        List<Report> reports = new ArrayList<>();
-        String sqlGetReportsByProjectId = "SELECT * FROM worklog WHERE projectid = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetReportsByProjectId, projectId);
-        while (results.next()) {
-            Report report = mapRowToWorkLog(results);
-            reports.add(report);
-        }
-        return reports;
-    }
+//    @Override
+//    public List<Report> getReportsByProjectId(int projectId) {
+//        List<Report> reports = new ArrayList<>();
+//        String sqlGetReportsByProjectId = "SELECT * FROM worklog WHERE projectid = ?";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetReportsByProjectId, projectId);
+//        while (results.next()) {
+//            Report report = mapRowToWorkLog(results);
+//            reports.add(report);
+//        }
+//        return reports;
+//    }
 
-    public List<Report> getAllReportsByUser(int userId) {
-        String sql = "SELECT * FROM worklog WHERE userid = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+//    public List<Report> getAllReportsByUser(int userId) {
+//        String sql = "SELECT * FROM worklog WHERE userid = ?";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+//
+//        List<Report> workLogs = new ArrayList<>();
+//        while (results.next()) {
+//            workLogs.add(mapRowToWorkLog(results));
+//        }
+//
+//        return workLogs;
+//    }
 
-        List<Report> workLogs = new ArrayList<>();
-        while (results.next()) {
-            workLogs.add(mapRowToWorkLog(results));
-        }
-
-        return workLogs;
-    }
-
-    public List<Report> getAllReportsForUserByProjectId(int userId, int projectId) {
-        List<Report> reports = new ArrayList<>();
-        String sql = "SELECT * FROM worklog WHERE userid = ? AND projectid = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, projectId);
-        while (results.next()) {
-            reports.add(mapRowToWorkLog(results));
-        }
-        return reports;
-    }
-
-
+//    public List<Report> getAllReportsForUserByProjectId(int userId, int projectId) {
+//        List<Report> reports = new ArrayList<>();
+//        String sql = "SELECT * FROM worklog WHERE userid = ? AND projectid = ?";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, projectId);
+//        while (results.next()) {
+//            reports.add(mapRowToWorkLog(results));
+//        }
+//        return reports;
+//    }
 
 
-    @Override
-    public List<Report> getAllReports() {
-        String sql = "SELECT w.*, p.projecttitle FROM worklog w JOIN project p ON w.projectid = p.projectid";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
-        List<Report> reportList = new ArrayList<>();
-        while (results.next()) {
-            Report report = mapRowToWorkLog(results);
-            report.setProjecttitle(results.getString("projecttitle"));
-            reportList.add(report);
-        }
-        return reportList;
-    }
 
 
-    public void updateReport(int reportId, Report report) {
-        String sql = "UPDATE worklog SET clockin = ?, clockout = ?, projectid = ? WHERE logid = ?";
-        jdbcTemplate.update(sql, report.getClockin(), report.getClockout(), report.getProjectid(), reportId);
-    }
+//    @Override
+//    public List<Report> getAllReports() {
+//        String sql = "SELECT w.*, p.projecttitle FROM worklog w JOIN project p ON w.projectid = p.projectid";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+//        List<Report> reportList = new ArrayList<>();
+//        while (results.next()) {
+//            Report report = mapRowToWorkLog(results);
+//            report.setProjecttitle(results.getString("projecttitle"));
+//            reportList.add(report);
+//        }
+//        return reportList;
+//    }
 
 
-    public void deleteReport(int reportId) {
-        String sql = "DELETE FROM worklog WHERE logid = ?";
-        jdbcTemplate.update(sql, reportId);
-    }
+//    public void updateReport(int reportId, Report report) {
+//        String sql = "UPDATE worklog SET clockin = ?, clockout = ?, projectid = ? WHERE logid = ?";
+//        jdbcTemplate.update(sql, report.getClockin(), report.getClockout(), report.getProjectid(), reportId);
+//    }
+//
+//
+//    public void deleteReport(int reportId) {
+//        String sql = "DELETE FROM worklog WHERE logid = ?";
+//        jdbcTemplate.update(sql, reportId);
+//    }
 
 
-    private Report mapRowToWorkLog(SqlRowSet results) {
-        Report workLog = new Report();
-        workLog.setId(results.getInt("logid"));
-        workLog.setUserid(results.getInt("userid"));
-        workLog.setClockin(results.getString("clockin"));
-        workLog.setClockout(results.getString("clockout"));
-        workLog.setProjectid(results.getInt("projectid"));
-        workLog.setTotaltime(results.getInt("totaltime"));
-
-//        LocalDateTime clockIn = workLog.getClockIn();
-//        LocalDateTime clockOut = workLog.getClockOut();
-//        long hours = ChronoUnit.HOURS.between(clockIn, clockOut);
-//        long minutes = ChronoUnit.MINUTES.between(clockIn, clockOut) - (hours * 60);
-//        long totalTime = (hours * 60) + minutes;
-
-        //workLog.setTotalTime(totalTime);
-
-        return workLog;
+    private Report mapRowToLog(SqlRowSet results) {
+        Report log = new Report();
+        log.setId(results.getInt("logid"));
+        log.setContent(results.getString("content"));
+        log.setType(results.getString("type"));
+        log.setDate(results.getString("date"));
+        return log;
     }
 
 
-    }
+
+}

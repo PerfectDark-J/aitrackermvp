@@ -75,21 +75,27 @@ export default {
     }
   },    
   methods: {
-        flipStatus(id) {
-            this.taskList.forEach( (task) => {
-                if(task.id==id){
-                    if(!task.tasksscompleted){
-                        task.tasksscompleted=true;
-                        ServerService.updateTask(task);
-                    }
-                }
-            });
-        },
+    flipStatus(id) {
+    this.taskList.forEach((task) => {
+        if (task.id == id) {
+            if (!task.tasksscompleted) {
+                task.tasksscompleted = true;
+                task.taskcompletiondate = new Date().toLocaleDateString();
+                ServerService.updateTask(task)
+                    .then(() => {
+                        location.reload();
+                    });
+            }
+        }
+    });
+},
+
     },  
   computed: {
   topFiveTasks() {
-    return this.taskList.slice(0, 5);
-  },
+  return this.taskList.filter(task => !task.tasksscompleted).slice(0, 5);
+},
+
   restOfTasks() {
     return this.taskList.slice(5);
   }
@@ -103,21 +109,29 @@ export default {
 
 <style>
   table {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background-color: white;
-    margin-top: 0px;
-    width:100%
-  }
-  th {
-    text-transform: uppercase;
-    font-size: 12px;
-    padding: 0px;
-  }
-  td {
-    padding: 0px;
-    font-size: 11px
-  }
+width: 120%; /* Increase this value */
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+background-color: white;
+margin-top: 0px;
+}
+
+
+.nav-container {
+height: 120%; /* Increase this value */
+}
+
+/* To increase the font size of the text inside the table, you can increase the font-size property of the "td" and "th" selectors: */
+
+th {
+text-transform: uppercase;
+font-size: 16px; 
+padding: 0px;
+}
+td {
+padding: 0px;
+font-size: 14px; 
+}
   .btnEComplete {
   margin-right: 5px;
   background-color: #335974;

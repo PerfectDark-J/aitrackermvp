@@ -83,8 +83,8 @@ public class JdbcTaskDao implements TaskDao {
     }
 
     public void addTask(Task task) {
-        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskduedate, taskcompletiondate, projectid) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskduedate(), task.getTaskcompletiondate(), task.getProjectid());
+        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskcompletiondate(), task.getUserid());
     }
 
 //    public Task getAllTasksByTaskId(int userId, int projectId, int taskId) {
@@ -101,8 +101,8 @@ public class JdbcTaskDao implements TaskDao {
     @Override
     public void updateTask(Task task) {
         System.out.println(task.getId());
-        String sql = "UPDATE task SET tasktitle = ?, taskdescription = ?, taskiscompleted = ?, taskduedate = ?, taskcompletiondate = ? WHERE taskid = ?";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskduedate(), task.getTaskcompletiondate(), task.getId());
+        String sql = "UPDATE task SET tasktitle = ?, taskdescription = ?, taskiscompleted = ?, taskcompletiondate = ?, userid = ? WHERE taskid = ?";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskcompletiondate(), task.getUserid(), task.getId());
     }
 
     @Override

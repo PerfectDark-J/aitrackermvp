@@ -74,31 +74,31 @@ export default {
 
     //Worklogs
     
-    getAllReports(){
-        return http.get('/worklog');
-    },
+    // getAllReports(){
+    //     return http.get('/worklog');
+    // },
 
-    getAllReportsByUser(userId){
-        return http.get(`/worklog/user/${userId}`)
-    },
+    // getAllReportsByUser(userId){
+    //     return http.get(`/worklog/user/${userId}`)
+    // },
 
-    getAllReportsForUserByProjectId(userid, projectid){
-        return http.get(`/worklog/${userid}/${projectid}`)
-    },
+    // getAllReportsForUserByProjectId(userid, projectid){
+    //     return http.get(`/worklog/${userid}/${projectid}`)
+    // },
 
-    getReportByReportId(reportId){
-        return http.get(`/worklog/${reportId}`)
-    },
+    // getReportByReportId(reportId){
+    //     return http.get(`/worklog/${reportId}`)
+    // },
 
     createReport(report){
-        return http.post('/worklog', report)
+        return http.post('/log', report)
     },
 
-    updateReport(reportId, report){
-        return http.put(`/worklog/${reportId}`, report)
-    },
+    // updateReport(reportId, report){
+    //     return http.put(`/worklog/${reportId}`, report)
+    // },
 
-    deleteReport(reportId){
-        return http.delete(`/worklog/${reportId}`)
-    },
+    // deleteReport(reportId){
+    //     return http.delete(`/worklog/${reportId}`)
+    // },
 }

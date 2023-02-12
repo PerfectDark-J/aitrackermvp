@@ -172,46 +172,46 @@ public class AppService {
 
 
 
-    @GetMapping("/worklog")
-    public List<Report> getAllReports() {
-        return reportDao.getAllReports();
-    }
+//    @GetMapping("/worklog")
+//    public List<Report> getAllReports() {
+//        return reportDao.getAllReports();
+//    }
+//
+//    @GetMapping("/worklog/{id}")
+//    public Report getWorklogById(@PathVariable int id) {
+//        return reportDao.getReportById(id);
+//    }
+//
+//    @GetMapping("/worklog/user/{userId}")
+//    public ResponseEntity<List<Report>> getAllReportsByUser(@PathVariable int userId) {
+//        List<Report> reports = reportDao.getAllReportsByUser(userId);
+//        return new ResponseEntity<>(reports, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/worklog/{userId}/{projectId}")
+//    public ResponseEntity<List<Report>> getAllReportsForUserByProjectId(@PathVariable int userId, @PathVariable int projectId) {
+//        List<Report> reports = reportDao.getAllReportsForUserByProjectId(userId, projectId);
+//        return new ResponseEntity<>(reports, HttpStatus.OK);
+//    }
 
-    @GetMapping("/worklog/{id}")
-    public Report getWorklogById(@PathVariable int id) {
-        return reportDao.getReportById(id);
-    }
-
-    @GetMapping("/worklog/user/{userId}")
-    public ResponseEntity<List<Report>> getAllReportsByUser(@PathVariable int userId) {
-        List<Report> reports = reportDao.getAllReportsByUser(userId);
-        return new ResponseEntity<>(reports, HttpStatus.OK);
-    }
-
-    @GetMapping("/worklog/{userId}/{projectId}")
-    public ResponseEntity<List<Report>> getAllReportsForUserByProjectId(@PathVariable int userId, @PathVariable int projectId) {
-        List<Report> reports = reportDao.getAllReportsForUserByProjectId(userId, projectId);
-        return new ResponseEntity<>(reports, HttpStatus.OK);
-    }
-
-    @PostMapping("/worklog")
+    @PostMapping("/log")
     public ResponseEntity<Report> createReport(@RequestBody Report report) {
 
         reportDao.createReport(report);
         return new ResponseEntity<>(report, HttpStatus.CREATED);
     }
 
-    @PutMapping("/worklog/{reportId}")
-    public ResponseEntity<Report> updateReport(@PathVariable int reportId, @RequestBody Report report) {
-        reportDao.updateReport(reportId, report);
-        return new ResponseEntity<>(report, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/worklog/{reportId}")
-    public ResponseEntity<Void> deleteReport(@PathVariable int reportId) {
-        reportDao.deleteReport(reportId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @PutMapping("/worklog/{reportId}")
+//    public ResponseEntity<Report> updateReport(@PathVariable int reportId, @RequestBody Report report) {
+//        reportDao.updateReport(reportId, report);
+//        return new ResponseEntity<>(report, HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/worklog/{reportId}")
+//    public ResponseEntity<Void> deleteReport(@PathVariable int reportId) {
+//        reportDao.deleteReport(reportId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     
 
