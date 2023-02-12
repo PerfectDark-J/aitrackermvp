@@ -18,6 +18,7 @@ tasktitle varchar(255),
 taskdescription varchar(255),
 taskiscompleted boolean,
 taskcompletiondate varchar(255),
+taskisrecurring boolean,
 userId integer REFERENCES Users(userId)
 );
 

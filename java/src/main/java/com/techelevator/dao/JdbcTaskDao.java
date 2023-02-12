@@ -83,8 +83,8 @@ public class JdbcTaskDao implements TaskDao {
     }
 
     public void addTask(Task task) {
-        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskcompletiondate(), task.getUserid());
+        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid, taskisrecurring) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskcompletiondate(), task.getUserid(), task.isTaskisrecurring() );
     }
 
 //    public Task getAllTasksByTaskId(int userId, int projectId, int taskId) {

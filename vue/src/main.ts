@@ -19,8 +19,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { faComment, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Chart from 'chart.js';
-
-
+import store from './store/store'
 
 
 hljs.registerLanguage('json', json);
@@ -29,6 +28,7 @@ const app = createApp(App);
 
 app.component('Datepicker', Datepicker);
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(store);
 
 
 const vuetify = createVuetify({
@@ -47,6 +47,7 @@ app
     createAuth0({
       domain: authConfig.domain,
       clientId: authConfig.clientId,
+     
       authorizationParams: {
         redirect_uri: 'http://localhost:3000/dash',
       }

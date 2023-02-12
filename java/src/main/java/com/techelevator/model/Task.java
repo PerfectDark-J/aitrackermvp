@@ -11,6 +11,8 @@ public class Task {
     private String taskcompletiondate;
     private int projectid;
 
+    private boolean taskisrecurring;
+
     private int userid;
 
     // Constructors
@@ -19,13 +21,14 @@ public class Task {
 
     }
 
-    public Task(int id, String tasktitle, String taskdescription, boolean tasksscompleted, String taskcompletiondate, int userid) {
+    public Task(int id, String tasktitle, String taskdescription, boolean tasksscompleted, String taskcompletiondate, int userid, boolean taskisrecurring) {
         this.id = id;
         this.tasktitle = tasktitle;
         this.taskdescription = taskdescription;
         this.tasksscompleted = tasksscompleted;
         this.taskcompletiondate = taskcompletiondate;
         this.userid = userid;
+        this.taskisrecurring = taskisrecurring;
     }
 
     public int getId() {
@@ -38,6 +41,14 @@ public class Task {
 
     public int getUserid() {
         return userid;
+    }
+
+    public boolean isTaskisrecurring() {
+        return taskisrecurring;
+    }
+
+    public void setTaskisrecurring(boolean taskisrecurring) {
+        this.taskisrecurring = taskisrecurring;
     }
 
     public void setUserid(int userid) {
