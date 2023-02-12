@@ -20,7 +20,7 @@
     </template>
     <v-card style="height: 80vh;">
       <v-card-title>
-        Add Entry
+        What would you like to track?
       </v-card-title>
       <v-card-text>
         <v-row>
