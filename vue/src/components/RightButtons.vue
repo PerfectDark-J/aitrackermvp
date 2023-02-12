@@ -1,5 +1,6 @@
 <template>
   <div class="right-component">
+    
     <div class="floating-buttons">
       <div class="top-button">
         <font-awesome-icon :icon="['fas', 'comment']" />
@@ -25,6 +26,7 @@
             label="Description"
             outlined
             style="height: 200px"
+            v-model="description"
           ></v-textarea>
         </v-card-text>
 
@@ -122,16 +124,23 @@ export default {
       openPopup: false,
       selected: '',
       showDateOption: false,
-      dateOption: ''
+      dateOption: '',
+      description: ''
     }
   },
   methods: {
     saveEntry() {
       console.log('Saving entry with type: ', this.selected);
       console.log('Saving entry with date option: ', this.dateOption);
-      const content = 'test';
+      const content = this.description;
       const type = this.selected;
-      const date = 'today';
+      const currentDate = new Date();
+      const options = { timeZone: 'America/New_York' };
+      const estDate = currentDate.toLocaleDateString('en-US', options);
+      const estTime = currentDate.toLocaleTimeString('en-US', options);
+      const date = `${estDate} ${estTime}`;
+
+          
       const report = { content, type, date };
       ServerService.createReport(report).then(response => {
         // handle success
@@ -156,6 +165,12 @@ export default {
         console.log('failed')
         // handle error
       });
+    this.successMessage = "Saved Successfully!";
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 2000);
+    this.openPopup = false;
+             location.reload();
     }
   },
   created() {
