@@ -2,7 +2,7 @@
   <div class="container">
     <div class="chart-container">
       <!-- Your chart goes here -->
-      <chart :filter="filter"/> 
+      <!-- <chart :filter="filter"/>  -->
     </div>
     <div class="bottom-half">
   <div class="left-component">

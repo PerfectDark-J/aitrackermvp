@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "serve:dist": "http-server dist"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.2",
