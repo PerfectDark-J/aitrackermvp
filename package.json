@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build",
-    "serve:dist": "http-server dist"
+    "serve:dist": "http-server dist",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.2",
