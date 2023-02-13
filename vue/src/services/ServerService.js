@@ -1,16 +1,16 @@
 import axios from 'axios';
 const http = axios.create({
-    baseURL: "http://localhost:9000"
+    baseURL: "https://ai-tracker.fly.dev/"
   });
   
 export default {
 
     verifyThroughEmail(email){
-        return http.post('http://localhost:9000/user', email)
+        return http.post('https://ai-tracker.fly.dev/user', email)
     },
 
     getUserByEmail(email){
-        return http.get(`http://localhost:9000/user?email=${email}`)
+        return http.get(`https://ai-tracker.fly.dev/user?email=${email}`)
     },
 
     //Projects
