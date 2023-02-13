@@ -1,6 +1,6 @@
 <template>
   <div>
-      <img id="header" src="/dream-life-logo.png" alt="Vue.js logo" />
+      <!-- <img id="header" src="/dream-life-logo.png" alt="Vue.js logo" /> -->
   </div>
 </template>
 

@@ -2,7 +2,7 @@
   
   <div class="chart-container">
     <h2>Dashboard</h2>
-    <img src="src\assets\Line-Graph.webp">
+    <!-- <img src="src\assets\Line-Graph.webp"> -->
     <filter-buttons @updateFilter="filter = $event"/>
     <!-- <canvas ref="chart"></canvas> -->
   </div>

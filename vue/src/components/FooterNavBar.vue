@@ -55,7 +55,7 @@ export default {
 #footer {
     background-color: #2f719d;
     /* overflow: hidden; */
-    position: sticky;
+    position: fixed;
     bottom: 0;
     width: 100%;
     display: flex;

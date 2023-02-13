@@ -49,7 +49,7 @@ app
       clientId: authConfig.clientId,
      
       authorizationParams: {
-        redirect_uri: 'https://ai-tracker.fly.dev/dash',
+        redirect_uri: 'http://localhost:3000',
       }
     })
   )
