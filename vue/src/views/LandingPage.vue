@@ -55,9 +55,7 @@ export default {
 
   }
 
-  .welcome-text {
-
-  }
+  
 
   .desc-text {
     margin-top: 10em;

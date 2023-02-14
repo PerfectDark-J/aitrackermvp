@@ -25,11 +25,13 @@ public class JdbcReportDao implements ReportDao {
     //Temp method
 
     public void createReport(Report report) {
-
-        String sql = "INSERT INTO log (content, type, date) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, report.getContent(), report.getType(), report.getDate());
-
+        String sql = "INSERT INTO log (userid, content, type, date, description, exercise, reps, weight, minutes) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, report.getuserid(), report.getContent(), report.getType(),
+                report.getDate(), report.getDescription(), report.getExercise(), report.getReps(),
+                report.getWeight(), report.getMinutes());
     }
+
 
 
 
@@ -64,17 +66,80 @@ public class JdbcReportDao implements ReportDao {
 //        return reports;
 //    }
 
-//    public List<Report> getAllReportsByUser(int userId) {
-//        String sql = "SELECT * FROM worklog WHERE userid = ?";
-//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
-//
-//        List<Report> workLogs = new ArrayList<>();
-//        while (results.next()) {
-//            workLogs.add(mapRowToWorkLog(results));
-//        }
-//
-//        return workLogs;
-//    }
+    public List<Report> getAllReportsByUser(int userId) {
+        String sql = "SELECT * FROM log WHERE userid = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+
+        List<Report> workLogs = new ArrayList<>();
+        while (results.next()) {
+            workLogs.add(mapRowToLog(results));
+        }
+
+        return workLogs;
+    }
+
+    public List<Report> getAllUserWorkouts(int userId) {
+        String sql = "SELECT * FROM log WHERE userid = ? AND type = 'Workout'";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+
+        List<Report> workLogs = new ArrayList<>();
+        while (results.next()) {
+            workLogs.add(mapRowToLog(results));
+        }
+
+        return workLogs;
+    }
+
+    public List<Report> getLogs(String timeframe, String type, String description, String exercise) {
+        List<Object> params = new ArrayList<>();
+        String sql = "SELECT * FROM log WHERE 1=1 ";
+
+        if (!timeframe.isEmpty()) {
+            if (timeframe.equalsIgnoreCase("today")) {
+                sql += "AND date_trunc('day', date) = date_trunc('day', CURRENT_TIMESTAMP) ";
+            } else if (timeframe.matches("\\d+")) {
+                sql += "AND date >= (CURRENT_TIMESTAMP - interval '" + timeframe + " days') ";
+            } else if (timeframe.equalsIgnoreCase("365")) {
+                sql += "AND date >= (CURRENT_TIMESTAMP - interval '1 year') ";
+            }
+        }
+
+        if (!type.isEmpty()) {
+            sql += "AND type = ? ";
+            params.add(type);
+        }
+
+        if (!description.isEmpty()) {
+            sql += "AND description = ? ";
+            params.add(description);
+        }
+
+        if (!exercise.isEmpty()) {
+            sql += "AND exercise = ? ";
+            params.add(exercise);
+        }
+
+        List<Report> reports = new ArrayList<>();
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(sql, params.toArray());
+        while (rows.next()) {
+            Report report = new Report();
+            report.setId(rows.getInt("id"));
+            report.setuserid(rows.getInt("userid"));
+            report.setContent(rows.getString("content"));
+            report.setType(rows.getString("type"));
+            report.setDate(rows.getTimestamp("date"));
+            report.setDescription(rows.getString("description"));
+            report.setExercise(rows.getString("exercise"));
+            report.setReps(rows.getInt("reps"));
+            report.setWeight(rows.getInt("weight"));
+            report.setMinutes(rows.getInt("minutes"));
+            reports.add(report);
+        }
+
+        return reports;
+    }
+
+
 
 //    public List<Report> getAllReportsForUserByProjectId(int userId, int projectId) {
 //        List<Report> reports = new ArrayList<>();
@@ -116,12 +181,18 @@ public class JdbcReportDao implements ReportDao {
 
 
     private Report mapRowToLog(SqlRowSet results) {
-        Report log = new Report();
-        log.setId(results.getInt("logid"));
-        log.setContent(results.getString("content"));
-        log.setType(results.getString("type"));
-        log.setDate(results.getString("date"));
-        return log;
+        Report report = new Report();
+        //report.setId(results.getInt("id"));
+        report.setContent(results.getString("content"));
+        report.setType(results.getString("type"));
+        report.setDate(results.getTimestamp("date"));
+        report.setuserid(results.getInt("userid"));
+        report.setDescription(results.getString("description"));
+        report.setExercise(results.getString("exercise"));
+        report.setReps(results.getInt("reps"));
+        report.setWeight(results.getInt("weight"));
+        report.setMinutes(results.getInt("minutes"));
+        return report;
     }
 
 

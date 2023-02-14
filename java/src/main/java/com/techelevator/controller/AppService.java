@@ -182,11 +182,49 @@ public class AppService {
 //        return reportDao.getReportById(id);
 //    }
 //
-//    @GetMapping("/worklog/user/{userId}")
-//    public ResponseEntity<List<Report>> getAllReportsByUser(@PathVariable int userId) {
-//        List<Report> reports = reportDao.getAllReportsByUser(userId);
-//        return new ResponseEntity<>(reports, HttpStatus.OK);
-//    }
+    @GetMapping("/worklog/user/{userId}")
+    public ResponseEntity<List<Report>> getAllReportsByUser(@PathVariable int userId) {
+        List<Report> reports = reportDao.getAllReportsByUser(userId);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
+    @GetMapping("/log/workouts/{userId}")
+    public ResponseEntity<List<Report>> getAllWorkoutsUser(@PathVariable int userId) {
+        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
+    @GetMapping("/logs")
+    public List<Report> getLogs(
+            @RequestParam(required = false, defaultValue = "") String timeframe,
+            @RequestParam(required = false, defaultValue = "") String type,
+            @RequestParam(required = false, defaultValue = "") String description,
+            @RequestParam(required = false, defaultValue = "") String exercise) {
+
+        return reportDao.getLogs(timeframe, type, description, exercise);
+    }
+
+    //NEEDS JDBC METHOD
+    @GetMapping("/log/workouts/today/{userId}")
+    public ResponseEntity<List<Report>> getAllFromTodayUser(@PathVariable int userId) {
+        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
+    //NEEDS JDBC METHOD
+    @GetMapping("/log/workouts/week/{userId}")
+    public ResponseEntity<List<Report>> getAllFromThisWeekUser(@PathVariable int userId) {
+        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
+    //NEEDS JDBC METHOD
+    @GetMapping("/log/workouts/month/{userId}")
+    public ResponseEntity<List<Report>> getAllFromMonthUser(@PathVariable int userId) {
+        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
 //
 //    @GetMapping("/worklog/{userId}/{projectId}")
 //    public ResponseEntity<List<Report>> getAllReportsForUserByProjectId(@PathVariable int userId, @PathVariable int projectId) {
@@ -194,6 +232,7 @@ public class AppService {
 //        return new ResponseEntity<>(reports, HttpStatus.OK);
 //    }
 
+    @CrossOrigin
     @PostMapping("/log")
     public ResponseEntity<Report> createReport(@RequestBody Report report) {
 

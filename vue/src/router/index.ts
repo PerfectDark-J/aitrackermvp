@@ -19,42 +19,42 @@ export function createRouter(app: App): Router {
         name: "landingPage",
         component: LandingPage
       },
-      {
-        path: "/profile",
-        name: "profile",
-        component: Profile,
-        beforeEnter: createAuthGuard(app)
-      },
+      // {
+      //   path: "/profile",
+      //   name: "profile",
+      //   component: Profile,
+      //   beforeEnter: createAuthGuard(app)
+      // },
       {
         path: "/dash",
         name: "dashboard",
         component: Dashboard,
         beforeEnter: createAuthGuard(app)
       },
-      {
-        path: "/projects/:id",
-        name: "project",
-        component: SingleProjectPage,
-        beforeEnter: createAuthGuard(app)
-      },
+      // {
+      //   path: "/projects/:id",
+      //   name: "project",
+      //   component: SingleProjectPage,
+      //   beforeEnter: createAuthGuard(app)
+      // },
       {
         path: "/tasks",
         name: "tasks",
         component: TaskPage,
         beforeEnter: createAuthGuard(app)
       },
-      {
-        path: "/worklog",
-        name: "listProjectsReport",
-        component: ListProjectsReport,
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: "/:userid/worklog/:projectid",
-        name: "singleProjectTimeReport",
-        component: SingleProjectTimeReport,
-        beforeEnter: createAuthGuard(app)
-      }
+      // {
+      //   path: "/worklog",
+      //   name: "listProjectsReport",
+      //   component: ListProjectsReport,
+      //   beforeEnter: createAuthGuard(app)
+      // },
+      // {
+      //   path: "/:userid/worklog/:projectid",
+      //   name: "singleProjectTimeReport",
+      //   component: SingleProjectTimeReport,
+      //   beforeEnter: createAuthGuard(app)
+      // }
     ],
     history: createWebHashHistory()
   })
