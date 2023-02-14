@@ -119,7 +119,6 @@ export default {
   grid-column: 1 / 2;
   height: 100%;
   overflow: auto;
-  
 }
 
 .right-component {

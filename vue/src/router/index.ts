@@ -5,9 +5,10 @@ import { createAuthGuard } from "@auth0/auth0-vue";
 import { App } from 'vue';
 import Dashboard from "../views/Dashboard.vue";
 import SingleProjectPage from "../views/SingleProjectPage.vue";
-import TaskPage from "../views/TaskPage.vue";
+//import TaskPage from "../views/TaskPage.vue";
 import ListProjectsReport from "../views/ListProjectsReport.vue";
 import SingleProjectTimeReport from "../views/SingleProjectTimeReport.vue";
+import Display from "../views/Display.vue"
 
 
 
@@ -40,7 +41,7 @@ export function createRouter(app: App): Router {
       {
         path: "/display",
         name: "display",
-        component: TaskPage,
+        component: Display,
         beforeEnter: createAuthGuard(app)
       },
       {
