@@ -233,10 +233,19 @@
 <script>
 import TaskToggle from './TaskToggle.vue'
 import ServerService from '../services/ServerService'
+// import { User } from '@auth0/auth0-spa-js';
+// import { useAuth0 } from '@auth0/auth0-vue';
+
 // import { VButton, VTextField, VRadioGroup, VRadio, VSelect, VSelectList, VSelectItem, VCardActions, VCardText, VCard, VDialog, VCardTitle, VIcon, VRow, VCol } from 'vuetify/lib';
 
 export default {
   name: 'right-buttons',
+  props: {
+    userId: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     TaskToggle,
   },
@@ -303,35 +312,66 @@ export default {
     saveWorkout(){
           console.log("inside workout")
           
+          // const auth0 = useAuth0()
+
+          // ServerService.verifyThroughEmail({ email: auth0.user.value.email})
+      
+          // ServerService.getUserByEmail(`${auth0.user.value.email}`)
+          // .then(response => {
+          // const { userid } = response.data;})
+
+
+          // console.log(this.userid)
+          
           let type = 'Workout'
           let content;
+          let description; 
+          let exercise; 
+          let weight; 
+          let reps;
+          let minutes;
+          // const userid = this.userId
+          // console.log(userid)
+          //console.log(this.userid)
 
           if (this.selectedWorkout === 'Cardio') {
             content = `Cardio: Type: ${this.selectedCardioType} Duration: ${this.duration} minutes`;
+            description = 'Cardio'
+            exercise =  `${this.selectedCardioType}`
+            minutes = `${this.duration}`
           } else if (this.selectedWorkout === 'Bench') {
+            description = 'Bench'
             content = `Bench: Weight: ${this.benchWeight} lbs Reps: ${this.benchReps}`;
+            weight = `${this.benchWeight}`
+            reps = `${this.benchReps}`
           } else if (this.selectedWorkout === 'Abs') {
+            description = 'Abs'
             content = `Abs: ${this.selectedAbs}`;
+            exercise = `${this.selectedAbs}`
           } else if (this.selectedWorkout === 'Pullups') {
+            description = 'Pullups'
             content = `Pullups: ${this.pullupsReps} reps`;
+            reps = `${this.pullupsReps}`
           } else if (this.selectedWorkout === 'Pushups') {
+            description = 'Pushups'
             content = `Pushups: ${this.pushupsReps} reps`;
+            reps = `${this.pushupsReps}`
           } else if (this.selectedWorkout === 'Squats') {
+            description = 'Squats'
             content = `Squats: ${this.squats} reps`;
+            reps = `${this.squats}`
           }
 
-          const currentDate = new Date();
-          const options = { timeZone: 'America/New_York' };
-          const estDate = currentDate.toLocaleDateString('en-US', options);
-          const estTime = currentDate.toLocaleTimeString('en-US', options);
-          const date = `${estDate} ${estTime}`;
+          const date = new Date();
+          const userid = this.userId
 
-          const report = { content, type, date };
+          const report = { content, type, date, userid, description, exercise, weight, reps, minutes };
           ServerService.createReport(report).then(response => {
             console.log('success');
             console.log(report)
             }).catch(error => {
               console.log('failed');
+              console.log(report)
             });
 
             this.successMessage = "Saved Successfully!";
@@ -347,18 +387,23 @@ export default {
     saveEntry() {
       console.log('Saving entry with type: ', this.selected);
       console.log('Saving entry with date option: ', this.dateOption);
+      // console.log(userid)
+      // console.log(this.userid)
       
         
 
       const content = this.description;
       const type = this.selected;
-      const currentDate = new Date();
-      const options = { timeZone: 'America/New_York' };
-      const estDate = currentDate.toLocaleDateString('en-US', options);
-      const estTime = currentDate.toLocaleTimeString('en-US', options);
-      const date = `${estDate} ${estTime}`;
+      const date = new Date();
+      const userid = this.userId; 
 
-      const report = { content, type, date };
+      let description; 
+      let exercise; 
+      let weight; 
+      let reps;
+      let minutes;
+
+      const report = { content, type, date, userid, description, exercise, weight, reps, minutes };
       ServerService.createReport(report).then(response => {
         console.log('success');
       }).catch(error => {
@@ -377,6 +422,7 @@ export default {
 
   created() {
     console.log('Right buttons component created');
+    
   },
   computed: {
     dateOptionClass() {

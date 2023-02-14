@@ -11,7 +11,7 @@
   </div>
   <div class="right-component">
     <!-- Your right component goes here -->
-    <right-buttons />
+    <right-buttons :userId="userId" />
   </div>
 </div>
 </div>
@@ -34,7 +34,8 @@ export default {
   data() {
     return {
       taskList: [],
-      filter: null
+      filter: null,
+      userId: null
     };
   },
   created() {
@@ -48,6 +49,8 @@ export default {
       if(response.data == null){
         window.location.reload();
       }
+
+      this.userId = userid
       
       console.log(response.data)
       console.log(`isManager: ${ismanager}`);
