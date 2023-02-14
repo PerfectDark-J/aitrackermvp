@@ -38,8 +38,8 @@ export function createRouter(app: App): Router {
       //   beforeEnter: createAuthGuard(app)
       // },
       {
-        path: "/tasks",
-        name: "tasks",
+        path: "/display",
+        name: "display",
         component: TaskPage,
         beforeEnter: createAuthGuard(app)
       },

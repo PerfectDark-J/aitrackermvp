@@ -49,7 +49,7 @@ app
       clientId: authConfig.clientId,
      
       authorizationParams: {
-        redirect_uri: 'http://localhost:3000/dash',
+        redirect_uri: 'http://localhost:3000',
       }
     })
   )
