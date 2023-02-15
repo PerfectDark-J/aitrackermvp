@@ -1,143 +1,104 @@
-<template>
-  <div class="nav-container">
+<template class="container">
+  <v-row class="text-left">
+    <ol style="display: grid; grid-template-columns: 8fr 2fr; grid-gap: 10px; height: 50px;">
+
+      <template v-for="(task, index) in displayedTasks" :key="index">
+        <li style="display: flex; align-items: center; justify-content: flex-start; padding-left: 25px; height: 50px; background-color: white; border-radius: 10px; cursor: pointer;" @click="showTaskDetails(task)">
+          {{ task.tasktitle }}
+        </li>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+          <button style="height: 50px; width: 75px; background-color: blue; color: white; border: none; border-radius: 5px; font-size: smaller;" @click="completeTask(task.id)">Complete</button>
+        </div>
+      </template>
+    </ol>
+  </v-row>
+  <v-dialog v-model="dialog" max-width="600px">
     <v-card>
-      <table>
-        <thead>
-          <tr>
-            <th>Tasks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="task in topFiveTasks"
-            v-bind:key="task.id"
-            v-bind:class="{ disabled: task.isCompleted === false }"
-          >
-            <td>{{ task.tasktitle }}</td>
-            <td>
-              <button
-                v-on:click="flipStatus(task.id)"
-                class="btnEComplete"
-                v-if="!task.tasksscompleted"
-              >
-                Complete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <v-card-title>
+        <span class="headline">{{ selectedTask.tasktitle }}</span>
+      </v-card-title>
+      <v-card-text>
+        <p>{{ selectedTask.taskcontent }}</p>
+        <p>{{ selectedTask.taskdescription }}</p>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+      </v-card-actions>
     </v-card>
-    <div style="overflow: auto; height: calc(100% - 300px);">
-      <table>
-        <tbody>
-          <tr
-            v-for="task in restOfTasks"
-            v-bind:key="task.id"
-            v-bind:class="{ disabled: task.isCompleted === false }"
-          >
-            <td>{{ task.tasktitle }}</td>
-            <td>
-              <button
-                v-on:click="flipStatus(task.id)"
-                class="btnEComplete"
-                v-if="!task.tasksscompleted"
-              >
-                Complete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <!-- <add-task/> -->
-  </div>
+  </v-dialog>
 </template>
-
-
 <script>
-import TaskTile from '../components/Dashboard/TaskTile.vue';
-import { useAuth0 } from '@auth0/auth0-vue';
-import ServerService from '../services/ServerService.js';
-import AddTask from '../components/AddTask.vue'
-
+import Service from '../services/ServerService'
 
 export default {
-  name: "home-view",
-  props: ['taskList'],
+  props: {
+    taskList: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
-      filter: {
-        taskIsCompleted: false,
-        DueDate:''
-      },
-      timeFilter: null,
-      displayLimit: 5,
+      dialog: false,
+      confirm: false,
+      selectedResult: {}
     }
-  },    
-  methods: {
-    flipStatus(id) {
-    this.taskList.forEach((task) => {
-        if (task.id == id) {
-            if (!task.tasksscompleted) {
-                task.tasksscompleted = true;
-                task.taskcompletiondate = new Date().toLocaleDateString();
-                ServerService.updateTask(task)
-                    .then(() => {
-                        location.reload();
-                    });
-            }
-        }
-    });
-},
-
-    },  
-  computed: {
-  topFiveTasks() {
-  return this.taskList.filter(task => !task.tasksscompleted).slice(0, 5);
-},
-
-  restOfTasks() {
-    return this.taskList.slice(5);
-  }
-},
-  components: {
-    TaskTile,
-    AddTask
   },
-};
+  computed: {
+    displayedTasks() {
+      return this.taskList.filter(task => !task.taskisCompleted)
+    }
+  },
+  methods: {
+    showTaskDetails(task) {
+      this.selectedTask = task
+      this.dialog = true
+    },
+    deleteItem(id) {
+      // Code to delete item from taskList
+    },
+    completeTask(id) {
+      // Code to flip the status of task
+      Service.completeTask(id).then(() => {
+        this.taskList = this.taskList.map(task => {
+          if (task.id === id) {
+            task.taskisCompleted = true
+          }
+          return task
+        })
+      })
+      Service.deleteLog()
+    },
+    saveChanges() {
+      // Code to save changes to the task
+    }
+  }
+}
 </script>
 
-<style>
-  table {
-width: 120%; /* Increase this value */
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-background-color: white;
-margin-top: 0px;
+<style scoped>
+.container {
+  background-color: white;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1; /* add this */
+}
+
+.v-list-item__content {
+  padding-left: 20px;
+}
+
+.lightblue-background {
+  background-color: lightblue;
+}
+
+.background-white {
+  background-color: white;
 }
 
 
-.nav-container {
-height: 120%; /* Increase this value */
-}
 
-/* To increase the font size of the text inside the table, you can increase the font-size property of the "td" and "th" selectors: */
 
-th {
-text-transform: uppercase;
-font-size: 16px; 
-padding: 0px;
-}
-td {
-padding: 0px;
-font-size: 14px; 
-}
-  .btnEComplete {
-  margin-right: 5px;
-  background-color: #335974;
-  color: white;
-  border-color: black;
-  border-radius: 5px;
-  padding: 5px;;
-  }
+
 </style>

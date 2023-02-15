@@ -1,13 +1,13 @@
 import { createRouter as createVueRouter, createWebHashHistory, Router } from "vue-router";
-import LandingPage from "../views/LandingPage.vue";
-import Profile from "../views/Profile.vue";
+import LandingPage from "../previous/LandingPage.vue";
+import Profile from "../previous/Profile.vue";
 import { createAuthGuard } from "@auth0/auth0-vue";
 import { App } from 'vue';
 import Dashboard from "../views/Dashboard.vue";
-import SingleProjectPage from "../views/SingleProjectPage.vue";
+import SingleProjectPage from "../previous/SingleProjectPage.vue";
 //import TaskPage from "../views/TaskPage.vue";
-import ListProjectsReport from "../views/ListProjectsReport.vue";
-import SingleProjectTimeReport from "../views/SingleProjectTimeReport.vue";
+import ListProjectsReport from "../previous/ListProjectsReport.vue";
+import SingleProjectTimeReport from "../previous/SingleProjectTimeReport.vue";
 import Display from "../views/Display.vue"
 
 

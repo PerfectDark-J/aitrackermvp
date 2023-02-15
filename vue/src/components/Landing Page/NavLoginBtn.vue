@@ -36,14 +36,7 @@ export default {
 
 <style>
 @media only screen and (max-width: 767px){
-    #footer {
-        /* overflow: hidden; */
-        position: sticky;
-        bottom: 0;
-        width: 100%;
-        padding: 2% 0 2% 0;
-        background-color: #78b2c6;
-    }
+    
 
     .loginBtn {
         background-color: white;

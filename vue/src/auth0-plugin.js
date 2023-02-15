@@ -21,7 +21,7 @@
     onRedirectCallback = (appState) => {
       window.history.replaceState({}, document.title, window.location.pathname);
       window.location.href = 'http://localhost:3000'; 
-      // window.location.href = 'https://luminous-figolla-dbc40d.netlify.app';
+      //window.location.href = 'https://luminous-figolla-dbc40d.netlify.app';
     },
     redirectUri = window.location.origin,
     ...pluginOptions

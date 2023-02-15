@@ -7,8 +7,8 @@ const http = axios.create({
 export default {
 
     verifyThroughEmail(email){
-        return http.post('http://localhost:9000', email)
-        return http.post('https://ai-tracker-1.fly.dev/', email)
+         return http.post('http://localhost:9000', email)
+        //return http.post('https://ai-tracker-1.fly.dev/', email)
     },
 
     getUserByEmail(email){
@@ -62,6 +62,15 @@ export default {
     getAllTasksByTaskId(taskId){
         return http.get(`/task/${taskId}`)
     },
+
+    getTaskByTitle(title) {
+  return http.get(`/tasktitle/${title}`)
+    
+},
+
+    completeTask(id){
+        return http.post(`/complete/${id}`)
+    },
     
     addTask(task){
         return http.post('/task', task)
@@ -103,13 +112,13 @@ export default {
         let description = query.description; 
         let exercise = query.exercise; 
         return http.get('/logs', {params: {timeframe, type, description, exercise}})
-    }
+    },
 
     // updateReport(reportId, report){
     //     return http.put(`/worklog/${reportId}`, report)
     // },
 
-    // deleteReport(reportId){
-    //     return http.delete(`/worklog/${reportId}`)
-    // },
+    deleteLog(logId){
+        return http.delete(`/log/${logId}`)
+    },
 }

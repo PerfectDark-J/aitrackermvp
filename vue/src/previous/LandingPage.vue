@@ -1,27 +1,27 @@
 <template>
 <div>
-  <div class="background">
+  <!-- <div class="background">
         <div class="landing-page-container">
-      <div id="main-logo"><logo-image /></div>
+      //<div id="main-logo"><logo-image /></div>
       <div class="welcome-text"><welcome-text /></div>
       <div class="desc-text"><landing-page-desc /></div>
     </div>
-  </div>
+  </div> -->
 
 </div>
 </template>
 
 <script lang="ts">
-import WelcomeText from '../components/Landing Page/WelcomeText.vue';
-import LandingPageDesc from '../components/Landing Page/LandingPageDesc.vue';
-import LogoImage from '../components/LogoImage.vue';
+// import WelcomeText from './WelcomeText.vue';
+// import LandingPageDesc from './LandingPageDesc.vue';
+//import LogoImage from './LogoImage.vue';
 
 export default {
-  name: "home-view",
+  name: "landing-page",
   components: {
-    WelcomeText,
-    LandingPageDesc,
-    LogoImage
+    // WelcomeText,
+    // LandingPageDesc,
+    //LogoImage
   },
 };
 </script>,

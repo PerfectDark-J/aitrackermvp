@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ProjectTile from '../Dashboard/ProjectTile.vue';
+import ProjectTile from '../../previous/ProjectTile.vue';
 
 export default {
   components: { ProjectTile },

@@ -90,8 +90,8 @@
 </template>
 
 <script lang="ts">
-import TaskTile from "../components/Dashboard/TaskTile.vue";
-import LogoImage from "../components/LogoImage.vue";
+import TaskTile from "./TaskTile.vue";
+import LogoImage from "./LogoImage.vue";
 import SingleProjectDetails from "../components/Single Project Page/SingleProjectDetails.vue";
 import service from "../services/ServerService.js";
 import { useAuth0 } from "@auth0/auth0-vue";

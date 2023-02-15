@@ -35,8 +35,8 @@
 <script>
 import { ref } from 'vue';
 import Datepicker from '@vuepic/vue-datepicker';
-import TimerButton from '../../components/TimerButton.vue';
-import ServerService from '../../services/ServerService'
+import TimerButton from './TimerButton.vue';
+import ServerService from '../services/ServerService'
 
 export default {
     // props: ["projectTitle"],

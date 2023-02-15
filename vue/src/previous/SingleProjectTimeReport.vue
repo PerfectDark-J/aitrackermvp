@@ -3,20 +3,21 @@
     <div class="logo-container">
       <logo-image />
     </div>
-    <list-all-project-report />
+    <single-project-report-details />
   </div>
 </template>
 
 <script>
-import ListAllProjectReport from '../components/Reports/ListAllProjectReport.vue';
-import LogoImage from '../components/LogoImage.vue';
+import SingleProjectReportDetails from './SingleProjectReportDetails.vue'
+import LogoImage from './LogoImage.vue';
 
 export default {
-    components: {
+  components: { 
+      SingleProjectReportDetails, 
       LogoImage,
-      ListAllProjectReport
     },
-  }
+
+}
 </script>
 
 <style>

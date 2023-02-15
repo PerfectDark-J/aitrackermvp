@@ -1,5 +1,5 @@
 <template>
-  <div class="right-component">
+  
     
     <div class="floating-buttons">
       <div class="top-button">
@@ -226,7 +226,7 @@
     </v-card>
     </v-dialog>
 
-  </div>
+ 
 </template>
 
 
@@ -291,7 +291,7 @@ export default {
         taskcompletiondate: '',
         taskdescription: '',
         taskiscompleted: false,
-        userid: 3, //change later
+        userid: this.userId,
         taskisrecurring: this.isrecurring
 
       };
@@ -300,13 +300,40 @@ export default {
       ServerService.addTask(task).then(response => {
         // handle success
         console.log('TASK ADDED')
+
+        
+      
+
+        const date = new Date();
+        console.log(date)
+        let content = this.tasktitle
+        console.log(content)
+
+        let type = 'Task';
+        
+        let userid = this.userId;
+        let description = 'Task';
+        let exercise;
+        let weight;
+        let reps;
+        let minutes; 
+        const report = { content, type, date, userid, description, exercise, weight, reps, minutes };
+        console.log(report)
+        ServerService.createReport(report)
+
+
+
+
         this.showTask = false;
         this.showPopup = false; 
         window.location.reload()
       }).catch(error => {
         // handle error
+        
         console.log('FAILED')
       });
+      
+      
       this.showTask = false;
     },
     saveWorkout(){
@@ -439,19 +466,17 @@ export default {
 
 
 <style scoped>
-  .right-component {
-    display: flex;
-    align-items: flex-start; /* change this */
-    padding-top: 5%;
-  }
+ 
+
 
   .floating-buttons {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* added this */
+  align-items: flex-start; /* added this */
   position: absolute;
   right: 15px; /* added this */
   z-index: 1;
+  bottom: 100px;
 }
 
 

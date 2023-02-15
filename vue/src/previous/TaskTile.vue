@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import service from '../../services/ServerService.js';
+import service from '../services/ServerService';
 
 export default {
   name: "taskTile",

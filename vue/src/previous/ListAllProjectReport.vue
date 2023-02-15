@@ -41,7 +41,7 @@
 <script>
 import { ref } from 'vue';
 import Datepicker from '@vuepic/vue-datepicker';
-import ServerService from '../../services/ServerService'
+import ServerService from '../services/ServerService'
 
 export default {
   name: "worklogReports",

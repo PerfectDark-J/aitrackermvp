@@ -4,18 +4,23 @@
       <!-- Your chart goes here -->
       <chart :filter="filter"/> 
     </div>
+    
     <div class="bottom-half">
-  <div class="left-component">
-    <!-- Your left component goes here -->
-    <tasks v-bind:taskList="taskList" />
-  </div>
-  <div class="right-component">
-    <!-- Your right component goes here -->
-    <right-buttons :userId="userId" />
-  </div>
-</div>
+  
+      <div class ="left-side">
+      <!-- Your left component goes here -->
+      <tasks v-bind:taskList="taskList" />
+      </div>
+  
+      <div class ="right-side">
+      <!-- Your right component goes here -->
+      <right-buttons :userId="userId" />
+      </div>
+
+    </div>
 </div>
 </template>
+
 <script lang="ts">
 import { useAuth0 } from '@auth0/auth0-vue';
 import ServerService from '../services/ServerService.js';
@@ -95,41 +100,42 @@ export default {
 </script>
 
 <style lang="css" scoped>
- .container {
+.container {
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 50% 50%;
-  height: 100vh;
-    overflow: hidden; /* Add this line */
+  grid-template-rows: 40% 60%;
+  height: 118vh;
+  overflow: hidden;
 }
 
 .chart-container {
   grid-row: 1 / 2;
-    overflow: hidden; /* Add this line */
+  overflow: hidden;
 }
 
 .bottom-half {
   grid-row: 2 / 3;
   display: grid;
-  grid-template-columns: 60% 40%; /* Changed from 75% 25% */
-    overflow: hidden; /* Add this line */
+  grid-template-columns: 80% 20%;
+  overflow: hidden;
 }
 
-.left-component {
-  grid-column: 1 / 2;
-  height: 100%;
-  overflow: auto;
-}
-
-.right-component {
-  grid-column: 2 / 3;
+.left-side {
   display: flex;
-  align-items: flex-start; /* change this line */
-  justify-content: center;
-  height: 100%; /* Add this line */
-    overflow: hidden; /* Add this line */
+  flex-direction: column;
+  width: 100%;
+  padding-top: 10px;
+  height: 230px; /* add this */
+  overflow: auto;
+  border-radius: 10px; /* add this */
 }
 
 
 
+.right-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
+

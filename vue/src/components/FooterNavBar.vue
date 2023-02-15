@@ -82,7 +82,7 @@ export default {
   flex: 1;
 }
 
-.login-btn-container {
+/* .login-btn-container {
     background-color: #2f719d;
     width: 80%;
     height: 100px;
@@ -90,7 +90,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin: 0;
-}
+} */
 
 
 </style>
