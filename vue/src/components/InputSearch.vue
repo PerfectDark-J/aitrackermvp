@@ -1,13 +1,16 @@
 <template>
   
    <!-- ******************************** Top ***************************************** -->
-
+     
+    <h1 v-auto-animate="{ duration: 200 }"> {{ type || "Search" }} </h1>
+  
+   
     <template class="top-component">
       <v-row class="text-left">
-        <ol style="display: grid; grid-template-columns: 8fr 2fr; grid-gap: 10px;">
+        <ol v-auto-animate="{ duration: 200 }" style="display: grid; grid-template-columns: 8fr 2fr; grid-gap: 10px;">
       <template v-for="(result, index) in searchData" :key="index">
           <li class="item" :class="{ 'lightblue-background': (index % 2 === 0) }" style="display: grid; grid-template-rows: 30px 40px; padding: 10px; cursor: pointer; height: 50px; font-size: larger;">
-          {{ result.content }}
+          {{ result.title }}
           </li>
     
       <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
@@ -51,6 +54,7 @@
                    </v-col>
                   </v-row>
                 </template>
+
               </template>
             </div>
           </template>
@@ -76,31 +80,30 @@
   
   <!-- ****************************** BOTTOM ***************************************** -->
   
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-text-field label="Keyword" v-model="searchQuery"/>
-        <v-row>
-          <v-col cols="5">
-            <v-select
-              :items="timeframes"
-              label="Days"
-              v-model="timeframe"
-              color="white"
-            />
-          </v-col>
-          <v-col cols="7">
-            <v-select
-              :items="types"
-              label="Type"
-              v-model="type"
-              color="white"
-            />
-          </v-col>
-        </v-row>
-        <v-text-field label="Description" v-model="description"/>
-        <v-text-field label="Exercise" v-model="exercise"/>
-      </v-col>
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field label="Keyword" v-model="searchQuery"/>
+          <v-row>
+            <v-col cols="5">
+              <v-select
+                :items="timeframes"
+                label="Days"
+                v-model="timeframe"
+                color="white"
+              />
+            </v-col>
+            <v-col cols="7">
+              <v-select
+                :items="types"
+                label="Type"
+                v-model="type"
+                color="white"
+              />
+            </v-col>
+          </v-row>
+          
+        </v-col>
 
  <!-- ****************************** BUTTONS ***************************************** -->
 
@@ -163,7 +166,7 @@ export default {
             
             //const response = await axios.get(`https://ai-tracker-1.fly.dev/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
             const response = await axios.get(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
-            console.log(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`)
+            //console.log(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`)
             
             this.searchData = response.data;
             console.log(this.searchData)
@@ -235,8 +238,8 @@ export default {
     background-color: white !important;
     width: 80%;
     margin: 20px 0; 
-    height: 600px !important;
-    border-radius: 0px;
+    height: 180px !important;
+    border-radius: 25px;
     margin-top: 20px;
     margin-left: 0;
     text-align: left;
@@ -315,7 +318,7 @@ span {
   background-color: white !important;
   border-radius: 20px;
   padding: 20px;
-  height: 50vh;
+  height: 40vh;
   overflow: auto;
 }
 
@@ -355,6 +358,10 @@ p {
   .lightblue-background {
     background-color: lightblue;
     
+  }
+
+  h1 {
+    color: white;
   }
 
 </style>

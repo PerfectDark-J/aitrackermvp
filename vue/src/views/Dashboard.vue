@@ -1,4 +1,11 @@
 <template>
+   <span style="color: white; font-size: smaller;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto auto;">
+      <h1 style="grid-column: 1 / 4;">{{ dayOfWeek }}</h1>
+      <p style="grid-column: 4 / 5;">{{ formattedDate }} {{ formattedTime }}</p>
+      <!-- <p style="grid-column: 4 / 5;">{{ formattedTime }}</p> -->
+    </div>
+  </span>
   <div class="container">
     <div class="chart-container">
       <!-- Your chart goes here -->
@@ -36,12 +43,46 @@ export default {
     Tasks, 
     RightButtons
   },
+  
   data() {
     return {
       taskList: [],
       filter: null,
-      userId: null
+      userId: null,
+      dayOfWeek: '',
+      currentDate: new Date()
     };
+  },
+  methods: {
+    getDayOfWeek() {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const today = new Date();
+      return daysOfWeek[today.getUTCDay()];
+    }
+  },
+  mounted() {
+    this.dayOfWeek = this.getDayOfWeek();
+     // Update the time every second
+    setInterval(() => {
+      this.currentDate = new Date();
+    }, 1000);
+  },
+
+  computed: {
+    formattedDate() {
+      return this.currentDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+    },
+    formattedTime() {
+      return this.currentDate.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      });
+    }
   },
   created() {
       const auth0 = useAuth0()
@@ -104,20 +145,26 @@ export default {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 40% 60%;
-  height: 118vh;
+  height: 100vh;
   overflow: hidden;
+  border-radius: 25px;
 }
 
 .chart-container {
   grid-row: 1 / 2;
+  height: 90%;
   overflow: hidden;
+  background-color: #F8F8F8;
+  border-radius: 25px;
 }
+
 
 .bottom-half {
   grid-row: 2 / 3;
   display: grid;
   grid-template-columns: 80% 20%;
   overflow: hidden;
+  
 }
 
 .left-side {
@@ -128,6 +175,7 @@ export default {
   height: 230px; /* add this */
   overflow: auto;
   border-radius: 10px; /* add this */
+  
 }
 
 
@@ -136,6 +184,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+h1 {
+  margin-left: 15px;
+  color: white;
 }
 </style>
 

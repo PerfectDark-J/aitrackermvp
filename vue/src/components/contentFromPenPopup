@@ -1,0 +1,100 @@
+
+              <v-dialog v-model="openPopup" max-height="90%">
+                <template v-slot:activator="{ on }">
+                  <div v-on="on"></div>
+                </template>
+                <v-card style="height: 80vh;">
+                  <v-card-title>
+                    Add Entry
+                  </v-card-title>
+                    
+                    <v-card-text >
+      <v-text-field
+        label="Title" style="height: 0px;"
+        outlined
+        v-model="title"
+      ></v-text-field>
+    </v-card-text>
+    <v-card-text >
+      <v-textarea
+        label="Description"
+        outlined
+        style="height: 350px"
+        :rows = 3
+        v-model="description"
+      ></v-textarea>
+    </v-card-text>
+
+
+        <v-card-actions class="d-flex flex-wrap" style="margin: 0; padding: 0; height: 200px" >
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Journal'; showDateOption = false"
+            :class="{ selected: selected === 'Journal' }"
+          >
+      
+            Journal
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Gratitude'; showDateOption = false"
+            :class="{ selected: selected === 'Gratitude' }"
+          >
+            Gratitude
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Meditation'; showDateOption = false"
+            :class="{ selected: selected === 'Meditation' }"
+          >
+            Meditation
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Story'; showDateOption = false"
+            :class="{ selected: selected === 'Story' }"
+          >
+            Story
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Business idea'; showDateOption = false"
+            :class="{ selected: selected === 'Business idea' }"
+          >
+            Business idea
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Quote'; showDateOption = false"
+            :class="{ selected: selected === 'Quote' }"
+          >
+            Quote
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Movie'; showDateOption = false"
+            :class="{ selected: selected === 'Movie' }"
+          >
+           Movie
+          </v-btn>
+          <v-btn
+            class="px-2 py-2"
+            @click="selected = 'Idea'; showDateOption = false"
+            :class="{ selected: selected === 'Idea' }"
+          >
+            Idea
+          </v-btn>
+      </v-card-actions>
+
+      <template v-if="showDateOption">
+      <TaskToggle v-bind:value="dateOption" @update:value="dateOption = $event" />
+      </template>
+
+      <v-card-actions style="justify-content: flex-end; margin-top: -50px; margin-right: -20px;"
+>
+  <v-btn class="" color="primary" floating fab small @click="saveEntry">
+    <font-awesome-icon :icon="['fas', 'plus']"/>
+  </v-btn>
+</v-card-actions>
+    </v-card>
+    </v-dialog>

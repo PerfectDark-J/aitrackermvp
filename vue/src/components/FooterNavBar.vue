@@ -53,7 +53,7 @@ export default {
 <style>
 
 #footer {
-    background-color: #2f719d;
+    /* background-color: #2f719d; */
     /* overflow: hidden; */
     position: fixed;
     bottom: 0;
@@ -63,6 +63,7 @@ export default {
 }
 
 .main-btn-container {
+    height: 120px;
     width: 100%;
 }
 

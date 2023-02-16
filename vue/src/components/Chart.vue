@@ -1,19 +1,21 @@
 <template>
   
   <div class="chart-container">
-    <h2>Dashboard</h2>
-    <!-- <img src="src\assets\Line-Graph.webp"> -->
-    <!-- <filter-buttons @updateFilter="filter = $event"/> -->
-    <!-- <canvas ref="chart"></canvas> -->
+   <test-auto-animate />
+
   </div>
 </template>
 
 <script>
 import FilterButtons from '../components/FilterButtons.vue'
+import test from '../components/TestAutoAnimate.vue'
+
 
 export default {
 components: {
-    FilterButtons
+    FilterButtons,
+    test
+   
 }
 }
 </script>
@@ -25,6 +27,7 @@ components: {
   height: 300px;
   margin: 0;
   text-align: left;
+  border-radius: 25;
 }
 
 .filter-buttons {
@@ -45,11 +48,11 @@ button {
   cursor: pointer;
 }
 
-.chart-container img {
+/* .chart-container img {
   height: 60%;
   width: 100%;
   margin: 0 auto;
-}
+} */
 
 h2 {
   text-align: left;

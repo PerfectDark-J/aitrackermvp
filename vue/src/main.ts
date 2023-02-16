@@ -1,4 +1,4 @@
-import App from "./App.vue";
+// import app from "src/App.vue";
 import { createApp } from "vue";
 import { createRouter } from "./router";
 import { createAuth0 } from "@auth0/auth0-vue";
@@ -10,16 +10,25 @@ import hljs from 'highlight.js/lib/core';
 import json from 'highlight.js/lib/languages/json';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 import "highlight.js/styles/github.css";
-import 'vuetify/styles'
-import { createVuetify } from "vuetify"
-import * as components from "vuetify/components"
-import * as directives from "vuetify/directives"
+import 'vuetify/styles';
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
 import { faHouse, faList, faTable, faStar, faPencil } from '@fortawesome/free-solid-svg-icons';
 import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+import '@vuepic/vue-datepicker/dist/main.css';
 import { faComment, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
-import Chart from 'chart.js';
+
 import store from './store/store'
+
+import App from './App.vue'
+import { Bar } from 'vue-chartjs'
+
+import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
+
+
+
+
 
 
 hljs.registerLanguage('json', json);
@@ -28,7 +37,10 @@ const app = createApp(App);
 
 app.component('Datepicker', Datepicker);
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.component('bar-chart', Bar)
 app.use(store);
+
+
 
 
 const vuetify = createVuetify({
@@ -56,4 +68,5 @@ app
   )
   .use(vuetify)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .use(autoAnimatePlugin)
   .mount("#app");

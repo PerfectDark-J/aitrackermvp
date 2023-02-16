@@ -5,7 +5,7 @@
       <div class="top-button">
         <font-awesome-icon :icon="['fas', 'comment']" />
       </div>
-      <div class="middle-button" @click="openPopup = true">
+      <div class="middle-button" @click="dialog = true">
         <font-awesome-icon :icon="['fas', 'pen']" />
       </div>
       <div class="bottom-button" @click="showPopup = true">
@@ -136,95 +136,26 @@
 
 
     
-    <!-- MIDDLE BUTTON POPUP -->
-    
-    <v-dialog v-model="openPopup" max-height="90%">
-      <template v-slot:activator="{ on }">
-        <div v-on="on"></div>
-      </template>
-      <v-card style="height: 80vh;">
-        <v-card-title>
-          Add Entry
-        </v-card-title>
-        <v-card-text>
-          <v-textarea
-            label="Description"
-            outlined
-            style="height: 200px"
-            v-model="description"
-          ></v-textarea>
-        </v-card-text>
+    <!-- PEN BUTTON POPUP -->
+    <v-dialog v-model="dialog" max-width="500px">
+    <v-card>
+      <v-card-title class="headline">{{ title }}</v-card-title>
 
-        <v-card-actions class="d-flex flex-wrap" style="margin: 0; padding: 0;">
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Journal'; showDateOption = false"
-            :class="{ selected: selected === 'Journal' }"
-          >
+      <v-card-text>
+        <v-text-field label="Title" v-model="title" single-line></v-text-field>
+        <v-textarea label="Description" v-model="description"></v-textarea>
+      </v-card-text>
+
+      <v-card-actions class="d-flex flex-wrap justify-center">
+        <v-btn text v-for="item in journalItems" :key="item" @click="selected = item">{{ item }}</v-btn>
+      </v-card-actions>
+
+      <v-btn color="transparent" class="fixed-bottom-right" @click="saveEntry" flat>
+  <font-awesome-icon :icon="['fas', 'plus']" />
+</v-btn>
       
-            Journal
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Gratitude'; showDateOption = false"
-            :class="{ selected: selected === 'Gratitude' }"
-          >
-            Gratitude
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Meditation'; showDateOption = false"
-            :class="{ selected: selected === 'Meditation' }"
-          >
-            Meditation
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Story'; showDateOption = false"
-            :class="{ selected: selected === 'Story' }"
-          >
-            Story
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Business idea'; showDateOption = false"
-            :class="{ selected: selected === 'Business idea' }"
-          >
-            Business idea
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Quote'; showDateOption = false"
-            :class="{ selected: selected === 'Quote' }"
-          >
-            Quote
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Movie'; showDateOption = false"
-            :class="{ selected: selected === 'Movie' }"
-          >
-           Movie
-          </v-btn>
-          <v-btn
-            class="px-2 py-2"
-            @click="selected = 'Idea'; showDateOption = false"
-            :class="{ selected: selected === 'Idea' }"
-          >
-            Idea
-          </v-btn>
-      </v-card-actions>
-
-      <template v-if="showDateOption">
-      <TaskToggle v-bind:value="dateOption" @update:value="dateOption = $event" />
-      </template>
-
-      <v-card-actions style="justify-content: flex-end;">
-      <v-btn color="primary" @click="saveEntry">Save</v-btn>
-
-      </v-card-actions>
     </v-card>
-    </v-dialog>
+  </v-dialog>
 
  
 </template>
@@ -255,10 +186,14 @@ export default {
       showTask: false,
       showWorkout: false, 
       showPopup: false,
+      dialog: false, 
+      title: '',
+      description: '',
       selected: '',
       showDateOption: false,
       dateOption: '',
       description: '',
+      journalItems: ["Journal", "Gratitude", "Meditation", "Story", "Business Idea", "Quote", "Movie", "Idea"],
       items: ['Water', 'Poop', 'Sex', 'Porn', 'Night Vit', 'Coffee', 'Alcohol', 'Pot', 'Morning Vit', 'Gaming'],
       counts: Array(10).fill(0),
       tasktitle: '',
@@ -419,6 +354,7 @@ export default {
       
         
 
+      const title = this.title; 
       const content = this.description;
       const type = this.selected;
       const date = new Date();
@@ -430,7 +366,7 @@ export default {
       let reps;
       let minutes;
 
-      const report = { content, type, date, userid, description, exercise, weight, reps, minutes };
+      const report = { title, content, type, date, userid, description, exercise, weight, reps, minutes };
       ServerService.createReport(report).then(response => {
         console.log('success');
       }).catch(error => {
@@ -499,11 +435,7 @@ export default {
     color: #ffffff !important; 
   }
 
-    .v-card-actions {
-    display: flex;
-    justify-content: center;
-  }
-
+ 
   .v-btn {
     width: 100px;
     margin: 10px;
@@ -533,6 +465,42 @@ span {
   align-items: center;
   justify-content: center;
 }
+
+/* .my-custom-spacing {
+  margin-bottom: -40px;
+} */
+
+/* .new-plus {
+    border-radius: 50%;
+    width: 15px;
+    height: 100px;
+    background-color: red;
+    padding: 0px;
+  } */
+
+v-dialog {
+    height: 80vh;
+  }
+
+v-card-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+  v-dialog {
+  height: 80vh;
+}
+
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+.fixed-bottom-right {
+    left: 220px; 
+    bottom:10px;
+    
+  }
 
 
 </style>
