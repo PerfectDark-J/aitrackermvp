@@ -25,13 +25,16 @@ CREATE TABLE log (
   id serial PRIMARY KEY,
   userid integer REFERENCES Users(userId),
   content text,
+  title varchar(250),
   type varchar(255),
   date timestamp,
   description text,
   exercise varchar(255),
   reps integer,
   weight integer,
-  minutes integer
+  minutes integer,
+  title varchar(255),
+  taskid integer
 );
 
 

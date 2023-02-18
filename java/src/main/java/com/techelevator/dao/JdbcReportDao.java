@@ -25,15 +25,19 @@ public class JdbcReportDao implements ReportDao {
     //Temp method
 
     public void createReport(Report report) {
-        String sql = "INSERT INTO log (userid, content, type, date, description, exercise, reps, weight, minutes) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, report.getuserid(), report.getContent(), report.getType(),
+        String sql = "INSERT INTO log (title, userid, content, type, date, description, exercise, reps, weight, minutes, taskid) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, report.getTitle(), report.getuserid(), report.getContent(), report.getType(),
                 report.getDate(), report.getDescription(), report.getExercise(), report.getReps(),
-                report.getWeight(), report.getMinutes());
+                report.getWeight(), report.getMinutes(), report.getTaskid());
     }
 
 
 
+    public int getMostRecentTaskId() {
+        String sql = "SELECT MAX(taskid) FROM task WHERE taskiscompleted = false";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
 
 
 
@@ -78,6 +82,8 @@ public class JdbcReportDao implements ReportDao {
         return workLogs;
     }
 
+
+
     public List<Report> getAllUserWorkouts(int userId) {
         String sql = "SELECT * FROM log WHERE userid = ? AND type = 'Workout'";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
@@ -91,33 +97,45 @@ public class JdbcReportDao implements ReportDao {
     }
 
     public List<Report> getLogs(String timeframe, String type, String description, String exercise) {
-        List<Object> params = new ArrayList<>();
-        String sql = "SELECT * FROM log WHERE 1=1 ";
+        System.out.println("Timeframe: " + timeframe);
+        System.out.println("Type: " + type);
+        System.out.println("Desc: " + description);
+        System.out.println("Exercise: " + exercise);
 
-        if (!timeframe.isEmpty()) {
+
+        List<Object> params = new ArrayList<>();
+        String sql = "SELECT * FROM log ";
+
+        if (!timeframe.isEmpty() || !type.isEmpty() || !description.isEmpty() || !exercise.isEmpty()) {
+            sql += "WHERE 1=1 ";
+        }
+
+        if (!timeframe.isEmpty() && !timeframe.equalsIgnoreCase("empty")) {
             if (timeframe.equalsIgnoreCase("today")) {
-                sql += "AND date_trunc('day', date) = date_trunc('day', CURRENT_TIMESTAMP) ";
+                sql += "AND date_trunc('day', date) = date_trunc('day', CURRENT_DATE) ";
             } else if (timeframe.matches("\\d+")) {
-                sql += "AND date >= (CURRENT_TIMESTAMP - interval '" + timeframe + " days') ";
+                sql += "AND date >= (CURRENT_DATE - interval '" + timeframe + " days') ";
             } else if (timeframe.equalsIgnoreCase("365")) {
-                sql += "AND date >= (CURRENT_TIMESTAMP - interval '1 year') ";
+                sql += "AND date >= (CURRENT_DATE - interval '1 year') ";
             }
         }
 
-        if (!type.isEmpty()) {
+        if (!type.isEmpty() && !type.equalsIgnoreCase("empty")) {
             sql += "AND type = ? ";
             params.add(type);
         }
 
-        if (!description.isEmpty()) {
+        if (!description.isEmpty() && !description.equalsIgnoreCase("empty")) {
             sql += "AND description = ? ";
             params.add(description);
         }
 
-        if (!exercise.isEmpty()) {
+        if (!exercise.isEmpty() && !exercise.equalsIgnoreCase("empty")) {
             sql += "AND exercise = ? ";
             params.add(exercise);
         }
+
+        System.out.println(sql);
 
         List<Report> reports = new ArrayList<>();
         SqlRowSet rows = jdbcTemplate.queryForRowSet(sql, params.toArray());
@@ -133,11 +151,33 @@ public class JdbcReportDao implements ReportDao {
             report.setReps(rows.getInt("reps"));
             report.setWeight(rows.getInt("weight"));
             report.setMinutes(rows.getInt("minutes"));
+            report.setTitle(rows.getString("title"));
+            report.setTaskid(rows.getInt("taskid"));
             reports.add(report);
         }
 
-        return reports;
-    }
+//        if (reports.isEmpty()) {
+//            sql = "SELECT * FROM log";
+//            rows = jdbcTemplate.queryForRowSet(sql);
+//            while (rows.next()) {
+//                Report report = new Report();
+//                report.setId(rows.getInt("id"));
+//                report.setuserid(rows.getInt("userid"));
+//                report.setContent(rows.getString("content"));
+//                report.setType(rows.getString("type"));
+//                report.setDate(rows.getTimestamp("date"));
+//                report.setDescription(rows.getString("description"));
+//                report.setExercise(rows.getString("exercise"));
+//                report.setReps(rows.getInt("reps"));
+//                report.setWeight(rows.getInt("weight"));
+//                report.setMinutes(rows.getInt("minutes"));
+//                reports.add(report);
+//            }
+//        }
+
+            return reports;
+        }
+
 
 
 
@@ -167,17 +207,19 @@ public class JdbcReportDao implements ReportDao {
 //        return reportList;
 //    }
 
+    public void updateLog(Report log) {
+        String sql = "UPDATE log SET content = ?, type = ?, date = ?, userid = ?, description = ?, exercise = ?, reps = ?, weight = ?, minutes = ?, title = ?, taskid = ? WHERE id = ?";
+        jdbcTemplate.update(sql, log.getContent(), log.getType(), log.getDate(), log.getuserid(), log.getDescription(), log.getExercise(), log.getReps(), log.getWeight(), log.getMinutes(), log.getTitle(), log.getTaskid(), log.getId());
+    }
 
-//    public void updateReport(int reportId, Report report) {
-//        String sql = "UPDATE worklog SET clockin = ?, clockout = ?, projectid = ? WHERE logid = ?";
-//        jdbcTemplate.update(sql, report.getClockin(), report.getClockout(), report.getProjectid(), reportId);
-//    }
-//
-//
-//    public void deleteReport(int reportId) {
-//        String sql = "DELETE FROM worklog WHERE logid = ?";
-//        jdbcTemplate.update(sql, reportId);
-//    }
+
+
+
+    //
+    public void deleteReport(int logId) {
+        String sql = "DELETE FROM log WHERE id = ?";
+        jdbcTemplate.update(sql, logId);
+    }
 
 
     private Report mapRowToLog(SqlRowSet results) {
@@ -192,6 +234,8 @@ public class JdbcReportDao implements ReportDao {
         report.setReps(results.getInt("reps"));
         report.setWeight(results.getInt("weight"));
         report.setMinutes(results.getInt("minutes"));
+        report.setTitle(results.getString("title"));
+        report.setTaskid(results.getInt("taskid"));
         return report;
     }
 

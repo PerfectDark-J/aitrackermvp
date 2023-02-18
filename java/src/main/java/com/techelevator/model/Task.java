@@ -6,14 +6,16 @@ public class Task {
     private int id;
     private String tasktitle;
     private String taskdescription;
-    private boolean tasksscompleted;
-    private String taskduedate;
+    private boolean taskiscompleted;
+
     private String taskcompletiondate;
-    private int projectid;
+
 
     private boolean taskisrecurring;
 
     private int userid;
+
+    private String comment;
 
     // Constructors
 
@@ -21,14 +23,23 @@ public class Task {
 
     }
 
-    public Task(int id, String tasktitle, String taskdescription, boolean tasksscompleted, String taskcompletiondate, int userid, boolean taskisrecurring) {
+    public Task(int id, String tasktitle, String taskdescription, boolean taskiscompleted, String taskcompletiondate, int userid, boolean taskisrecurring, String comment) {
         this.id = id;
         this.tasktitle = tasktitle;
         this.taskdescription = taskdescription;
-        this.tasksscompleted = tasksscompleted;
+        this.taskiscompleted = taskiscompleted;
         this.taskcompletiondate = taskcompletiondate;
         this.userid = userid;
         this.taskisrecurring = taskisrecurring;
+        this.comment = comment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getId() {
@@ -71,20 +82,12 @@ public class Task {
         this.taskdescription = taskdescription;
     }
 
-    public boolean isTasksscompleted() {
-        return tasksscompleted;
+    public boolean isTaskisCompleted() {
+        return taskiscompleted;
     }
 
-    public void setTasksscompleted(boolean tasksscompleted) {
-        this.tasksscompleted = tasksscompleted;
-    }
-
-    public String getTaskduedate() {
-        return taskduedate;
-    }
-
-    public void setTaskduedate(String taskduedate) {
-        this.taskduedate = taskduedate;
+    public void setTaskisCompleted(boolean taskiscompleted) {
+        this.taskiscompleted = taskiscompleted;
     }
 
     public String getTaskcompletiondate() {
@@ -93,13 +96,5 @@ public class Task {
 
     public void setTaskcompletiondate(String taskcompletiondate) {
         this.taskcompletiondate = taskcompletiondate;
-    }
-
-    public int getProjectid() {
-        return projectid;
-    }
-
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
     }
 }

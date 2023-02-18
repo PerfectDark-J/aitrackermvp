@@ -26,6 +26,9 @@ public class JdbcTaskDao implements TaskDao {
             Task task = mapRowToTask(results);
             tasks.add(task);
         }
+
+
+
         return tasks;
     }
 
@@ -40,7 +43,24 @@ public class JdbcTaskDao implements TaskDao {
         }
     }
 
-//    public List<Task> getTaskByProjectId(int projectId) {
+    public Integer getTaskByTitle(String title) {
+        String sql = "SELECT task.taskid " +
+                "FROM task " +
+                "INNER JOIN log ON task.userid = log.userid " +
+                "WHERE log.content = ? AND task.tasktitle = ?";
+
+        List<Integer> taskIds = jdbcTemplate.queryForList(sql, Integer.class, title, title);
+        if (taskIds.isEmpty()) {
+            return null;
+        } else {
+            return taskIds.get(0);
+        }
+    }
+
+
+
+
+    //    public List<Task> getTaskByProjectId(int projectId) {
 //        String sql = "SELECT * FROM task WHERE projectid = ?";
 //        List<Task> taskList = new ArrayList<>();
 //        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, projectId);
@@ -83,8 +103,8 @@ public class JdbcTaskDao implements TaskDao {
     }
 
     public void addTask(Task task) {
-        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid, taskisrecurring) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskcompletiondate(), task.getUserid(), task.isTaskisrecurring() );
+        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid, taskisrecurring, comment) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTaskisCompleted(), task.getTaskcompletiondate(), task.getUserid(), task.isTaskisrecurring(), task.getComment() );
     }
 
 //    public Task getAllTasksByTaskId(int userId, int projectId, int taskId) {
@@ -101,8 +121,15 @@ public class JdbcTaskDao implements TaskDao {
     @Override
     public void updateTask(Task task) {
         System.out.println(task.getId());
-        String sql = "UPDATE task SET tasktitle = ?, taskdescription = ?, taskiscompleted = ?, taskcompletiondate = ?, userid = ? WHERE taskid = ?";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTasksscompleted(), task.getTaskcompletiondate(), task.getUserid(), task.getId());
+        System.out.println(task.getTasktitle());
+        System.out.println(task.getTaskdescription());
+        System.out.println(task.getUserid());
+        System.out.println(task.isTaskisCompleted());
+        System.out.println(task.isTaskisrecurring());
+        //System.out.println(task.getTasks);
+
+        String sql = "UPDATE task SET tasktitle = ?, taskdescription = ?, taskiscompleted = ?, taskcompletiondate = ?, userid = ?, comment = ?, taskisrecurring = ? WHERE taskid = ?";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTaskisCompleted(), task.getTaskcompletiondate(), task.getUserid(), task.getComment(), task.isTaskisrecurring(), task.getId());
     }
 
     @Override
@@ -111,14 +138,35 @@ public class JdbcTaskDao implements TaskDao {
         jdbcTemplate.update(sql, taskId);
     }
 
+    public void completeTask(int id) {
+        String sql = "UPDATE task SET taskiscompleted = true, taskcompletiondate = current_timestamp, taskdescription = 'Task' WHERE taskid = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public boolean isTaskCompleted(int taskId) {
+        boolean isCompleted = false;
+
+        // SQL query to check if the task is completed
+        String sql = "SELECT taskiscompleted FROM task WHERE taskid = " + taskId;
+
+        // Use JdbcTemplate to execute the query and retrieve the result
+        isCompleted = jdbcTemplate.queryForObject(sql, Boolean.class);
+
+        return isCompleted;
+    }
+
+
+
     private Task mapRowToTask(SqlRowSet result) {
         Task task = new Task();
         task.setId(result.getInt("taskid"));
         task.setTasktitle(result.getString("tasktitle"));
         task.setTaskdescription(result.getString("taskdescription"));
-        task.setTasksscompleted(result.getBoolean("taskiscompleted"));
+        task.setTaskisCompleted(result.getBoolean("taskiscompleted"));
         task.setTaskcompletiondate(result.getString("taskcompletiondate"));
         task.setUserid(result.getInt("userid"));
+        task.setComment(result.getString("comment"));
+
         return task;
     }
 }

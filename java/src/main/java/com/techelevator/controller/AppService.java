@@ -141,6 +141,16 @@ public class AppService {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
+    @GetMapping("/tasktitle/{title}")
+    public ResponseEntity<Integer> getTaskByTitle(@PathVariable("title") String title) {
+        int taskInt = taskDao.getTaskByTitle(title);
+        if (taskInt == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(taskInt, HttpStatus.OK);
+    }
+
+
 //    @CrossOrigin(origins = "http://localhost:3000")
 //    @GetMapping("/singletask/{userid}")
 //    public ResponseEntity<List<Task>> getAllTasksByProjectId(@PathVariable int userid) {
@@ -166,6 +176,12 @@ public class AppService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/complete/{id}")
+    public ResponseEntity<Void> completeTask(@PathVariable int id) {
+        taskDao.completeTask(id);
+        return ResponseEntity.ok().build();
+    }
+
 
 
     //Worklog **********************************************************************
@@ -188,6 +204,19 @@ public class AppService {
         return new ResponseEntity<>(reports, HttpStatus.OK);
     }
 
+    @GetMapping("taskcompleted/{taskid}")
+    public ResponseEntity<Boolean> isTaskCompleted(@PathVariable("taskid") int taskid) {
+        // logic to check if the task with the given id is completed
+        boolean isTaskCompleted = taskDao.isTaskCompleted(taskid);
+        return ResponseEntity.ok(isTaskCompleted);
+    }
+
+    @GetMapping("/task/recent")
+    public ResponseEntity<Integer> getMostRecentLog() {
+        int taskId = reportDao.getMostRecentTaskId();
+        return new ResponseEntity<>(taskId, HttpStatus.OK);
+    }
+
     @GetMapping("/log/workouts/{userId}")
     public ResponseEntity<List<Report>> getAllWorkoutsUser(@PathVariable int userId) {
         List<Report> reports = reportDao.getAllUserWorkouts(userId);
@@ -201,29 +230,31 @@ public class AppService {
             @RequestParam(required = false, defaultValue = "") String description,
             @RequestParam(required = false, defaultValue = "") String exercise) {
 
+
+
         return reportDao.getLogs(timeframe, type, description, exercise);
     }
 
     //NEEDS JDBC METHOD
-    @GetMapping("/log/workouts/today/{userId}")
-    public ResponseEntity<List<Report>> getAllFromTodayUser(@PathVariable int userId) {
-        List<Report> reports = reportDao.getAllUserWorkouts(userId);
-        return new ResponseEntity<>(reports, HttpStatus.OK);
-    }
-
-    //NEEDS JDBC METHOD
-    @GetMapping("/log/workouts/week/{userId}")
-    public ResponseEntity<List<Report>> getAllFromThisWeekUser(@PathVariable int userId) {
-        List<Report> reports = reportDao.getAllUserWorkouts(userId);
-        return new ResponseEntity<>(reports, HttpStatus.OK);
-    }
-
-    //NEEDS JDBC METHOD
-    @GetMapping("/log/workouts/month/{userId}")
-    public ResponseEntity<List<Report>> getAllFromMonthUser(@PathVariable int userId) {
-        List<Report> reports = reportDao.getAllUserWorkouts(userId);
-        return new ResponseEntity<>(reports, HttpStatus.OK);
-    }
+//    @GetMapping("/log/workouts/today/{userId}")
+//    public ResponseEntity<List<Report>> getAllFromTodayUser(@PathVariable int userId) {
+//        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+//        return new ResponseEntity<>(reports, HttpStatus.OK);
+//    }
+//
+//    //NEEDS JDBC METHOD
+//    @GetMapping("/log/workouts/week/{userId}")
+//    public ResponseEntity<List<Report>> getAllFromThisWeekUser(@PathVariable int userId) {
+//        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+//        return new ResponseEntity<>(reports, HttpStatus.OK);
+//    }
+//
+//    //NEEDS JDBC METHOD
+//    @GetMapping("/log/workouts/month/{userId}")
+//    public ResponseEntity<List<Report>> getAllFromMonthUser(@PathVariable int userId) {
+//        List<Report> reports = reportDao.getAllUserWorkouts(userId);
+//        return new ResponseEntity<>(reports, HttpStatus.OK);
+//    }
 
 //
 //    @GetMapping("/worklog/{userId}/{projectId}")
@@ -240,17 +271,17 @@ public class AppService {
         return new ResponseEntity<>(report, HttpStatus.CREATED);
     }
 
-//    @PutMapping("/worklog/{reportId}")
-//    public ResponseEntity<Report> updateReport(@PathVariable int reportId, @RequestBody Report report) {
-//        reportDao.updateReport(reportId, report);
-//        return new ResponseEntity<>(report, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/worklog/{reportId}")
-//    public ResponseEntity<Void> deleteReport(@PathVariable int reportId) {
-//        reportDao.deleteReport(reportId);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
+    @PutMapping("/log")
+    public ResponseEntity<Report> updateReport(@RequestBody Report report) {
+        reportDao.updateLog(report);
+        return new ResponseEntity<>(report, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/log/{logId}")
+    public ResponseEntity<Void> deleteReport(@PathVariable int logId) {
+        reportDao.deleteReport(logId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     
 

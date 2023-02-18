@@ -6,6 +6,10 @@ public class Report {
 
     private int id;
 
+    private int taskid;
+
+    private String title;
+
     private int userid;
     private String content;
     private String type;
@@ -22,7 +26,7 @@ public class Report {
     private int minutes;
 
 
-    public Report(int id, int userid, String content, String type, Timestamp date, String description, String exercise, int reps, int weight, int minutes) {
+    public Report(int id, int userid, String content, String type, Timestamp date, String description, String exercise, int reps, int weight, int minutes, String title, int taskid) {
         this.id = id;
         this.userid = userid;
         this.content = content;
@@ -33,10 +37,20 @@ public class Report {
         this.reps = reps;
         this.weight = weight;
         this.minutes = minutes;
+        this.title = title;
+        this.taskid = taskid;
     }
 
     public Report(){
 
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -45,6 +59,14 @@ public class Report {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getTaskid() {
+        return taskid;
+    }
+
+    public void setTaskid(int taskid) {
+        this.taskid = taskid;
     }
 
     public String getExercise() {
