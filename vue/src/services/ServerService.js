@@ -1,18 +1,18 @@
 import axios from 'axios';
 const http = axios.create({
-    //baseURL: "https://ai-tracker-1.fly.dev/",
-     baseURL: "http://localhost:9000"
+    baseURL: "https://ai-tracker-1.fly.dev/",
+    // baseURL: "http://localhost:9000"
   });
   
 export default {
 
     verifyThroughEmail(email){
-        return http.post('http://localhost:9000', email)
+        //return http.post('http://localhost:9000', email)
         return http.post('https://ai-tracker-1.fly.dev/', email)
     },
 
     getUserByEmail(email){
-       return http.get(`http://localhost:9000/user?email=${email}`)
+       //return http.get(`http://localhost:9000/user?email=${email}`)
         return http.get(`https://ai-tracker-1.fly.dev/user?email=${email}`)
     },
 
@@ -63,10 +63,18 @@ export default {
         return http.get(`/task/${taskId}`)
     },
 
+    getMostRecentTaskId(){
+        return http.get('task/recent')
+    },
+
     getTaskByTitle(title) {
         return http.get(`/tasktitle/${title}`)
     
-},
+    },
+
+    isTaskCompleted(taskid){
+        return http.get(`/taskcompleted/${taskid}`)
+    },
 
     completeTask(id){
         return http.post(`/complete/${id}`)
@@ -114,9 +122,9 @@ export default {
         return http.get('/logs', {params: {timeframe, type, description, exercise}})
     },
 
-    // updateReport(reportId, report){
-    //     return http.put(`/worklog/${reportId}`, report)
-    // },
+    updateLog(report){
+        return http.put('/log', report)
+    },
 
     deleteLog(logId){
         return http.delete(`/log/${logId}`)

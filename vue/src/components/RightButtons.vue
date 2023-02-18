@@ -81,14 +81,14 @@
           </div>
           <div v-if="selectedWorkout === 'Abs'">
             <v-form>
-              <v-select label="Select" v-model="selectedAbs" :items="['Basic Abs', 'Full Abs']"/>
+              <v-select label="Select" v-model="exercise" :items="['Basic Abs', 'Full Abs']"/>
             </v-form>
           </div>
           <div v-if="selectedWorkout === 'Pullups'">
-            <v-text-field v-model="pullupsReps" label="Reps"></v-text-field>
+            <v-text-field v-model="reps" label="Reps"></v-text-field>
           </div>
           <div v-if="selectedWorkout === 'Pushups'">
-            <v-text-field v-model="pushupsReps" label="Reps"></v-text-field>
+            <v-text-field v-model="reps" label="Reps"></v-text-field>
           </div>
           <div v-if="selectedWorkout === 'Squats'">
             <v-text-field v-model="squats" label="Reps"></v-text-field>
@@ -109,6 +109,7 @@
         <v-card-title>Task</v-card-title>
         <v-card-text>
           <v-text-field label="Task Name" v-model="tasktitle"></v-text-field>
+          <v-textarea label="Comment" v-model="comment"></v-textarea>
           <v-row class="mx-2">
             <v-btn color="primary" @click="setTaskType('today')">Today</v-btn>
             <v-btn color="secondary" @click="setTaskType('daily')">Daily</v-btn>
@@ -188,6 +189,7 @@ export default {
       showPopup: false,
       dialog: false, 
       title: '',
+      comment: '',
       description: '',
       selected: '',
       showDateOption: false,
@@ -220,41 +222,40 @@ export default {
     }
     },
     saveTask() {
-      console.log('INSIDE SAVETASK')
       const task = {
         tasktitle: this.tasktitle,
+        comment: this.comment,
         taskcompletiondate: '',
-        taskdescription: '',
+        taskdescription: 'Task',
         taskiscompleted: false,
         userid: this.userId,
         taskisrecurring: this.isrecurring
-
       };
-      console.log('AFTER object')
-      console.log(task)
-      ServerService.addTask(task).then(response => {
-        // handle success
-        console.log('TASK ADDED')
-
-        
       
+      console.log(task)
 
-        const date = new Date();
-        console.log(date)
-        let content = this.tasktitle
-        console.log(content)
+      ServerService.addTask(task).then(response => {
 
-        let type = 'Task';
-        
-        let userid = this.userId;
-        let description = 'Task';
-        let exercise;
-        let weight;
-        let reps;
-        let minutes; 
-        const report = { content, type, date, userid, description, exercise, weight, reps, minutes };
-        console.log(report)
-        ServerService.createReport(report)
+        ServerService.getMostRecentTaskId().then(response => {
+        const taskid = response.data;
+
+        const report = {
+          userid: this.userId,
+          content: this.comment,
+          type: 'Task',
+          date: new Date(),
+          description: 'Task',
+          exercise: '',
+          weight: '',
+          reps: '',
+          minutes: '',
+          title: this.tasktitle,
+          taskid: taskid
+        };
+     
+        ServerService.createReport(report);
+      });
+
 
 
 
@@ -292,6 +293,7 @@ export default {
           let weight; 
           let reps;
           let minutes;
+          let title; 
           // const userid = this.userId
           // console.log(userid)
           //console.log(this.userid)
@@ -301,33 +303,39 @@ export default {
             description = 'Cardio'
             exercise =  `${this.selectedCardioType}`
             minutes = `${this.duration}`
+            title = 'Cardio: ' + new Date().toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "2-digit"})
           } else if (this.selectedWorkout === 'Bench') {
             description = 'Bench'
             content = `Bench: Weight: ${this.benchWeight} lbs Reps: ${this.benchReps}`;
             weight = `${this.benchWeight}`
             reps = `${this.benchReps}`
+            title = 'Bench: ' + new Date().toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "2-digit"})
           } else if (this.selectedWorkout === 'Abs') {
             description = 'Abs'
             content = `Abs: ${this.selectedAbs}`;
             exercise = `${this.selectedAbs}`
+            title = 'Abs: ' + new Date().toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "2-digit"})
           } else if (this.selectedWorkout === 'Pullups') {
             description = 'Pullups'
             content = `Pullups: ${this.pullupsReps} reps`;
             reps = `${this.pullupsReps}`
+            title = 'Pullups: ' + new Date().toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "2-digit"})
           } else if (this.selectedWorkout === 'Pushups') {
             description = 'Pushups'
             content = `Pushups: ${this.pushupsReps} reps`;
             reps = `${this.pushupsReps}`
+            title = 'Pushups: ' + new Date().toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "2-digit"})
           } else if (this.selectedWorkout === 'Squats') {
             description = 'Squats'
-            content = `Squats: ${this.squats} reps`;
+            content = `Squats: ${this.squats} reps`
             reps = `${this.squats}`
+            title = 'Squats: ' + new Date().toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "2-digit"})
           }
 
           const date = new Date();
           const userid = this.userId
 
-          const report = { content, type, date, userid, description, exercise, weight, reps, minutes };
+          const report = { content, type, date, userid, description, exercise, weight, reps, minutes, title };
           ServerService.createReport(report).then(response => {
             console.log('success');
             console.log(report)
