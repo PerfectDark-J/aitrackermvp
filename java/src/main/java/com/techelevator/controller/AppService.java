@@ -211,6 +211,11 @@ public class AppService {
         return ResponseEntity.ok(isTaskCompleted);
     }
 
+    @GetMapping("/getpoints")
+    public int getPoints(@RequestParam(value = "timeframe", defaultValue = "7") int timeframe) {
+        return reportDao.getPoints(timeframe);
+    }
+
     @GetMapping("/task/recent")
     public ResponseEntity<Integer> getMostRecentLog() {
         int taskId = reportDao.getMostRecentTaskId();

@@ -1,8 +1,10 @@
 package com.techelevator.dao;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -25,11 +27,11 @@ public class JdbcReportDao implements ReportDao {
     //Temp method
 
     public void createReport(Report report) {
-        String sql = "INSERT INTO log (title, userid, content, type, date, description, exercise, reps, weight, minutes, taskid) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO log (title, userid, content, type, date, description, exercise, reps, weight, minutes, earnedpoints, bounty, taskid) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, report.getTitle(), report.getuserid(), report.getContent(), report.getType(),
                 report.getDate(), report.getDescription(), report.getExercise(), report.getReps(),
-                report.getWeight(), report.getMinutes(), report.getTaskid());
+                report.getWeight(), report.getMinutes(), report.getEarnedpoints(), report.getBounty(), report.getTaskid());
     }
 
 
@@ -80,6 +82,22 @@ public class JdbcReportDao implements ReportDao {
         }
 
         return workLogs;
+    }
+
+    public int getPoints(int timeframe) {
+        String sql = "SELECT SUM(earnedpoints) FROM log WHERE date >= ? AND date <= ?";
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -timeframe);
+        Timestamp startDate = new Timestamp(cal.getTimeInMillis());
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, startDate, new Timestamp(System.currentTimeMillis()));
+
+        if (results.next()) {
+            return results.getInt(1);
+        } else {
+            return 0;
+        }
     }
 
 
@@ -153,6 +171,8 @@ public class JdbcReportDao implements ReportDao {
             report.setMinutes(rows.getInt("minutes"));
             report.setTitle(rows.getString("title"));
             report.setTaskid(rows.getInt("taskid"));
+            report.setEarnedpoints(rows.getInt("earnedpoints"));
+            report.setBounty(rows.getInt("bounty"));
             reports.add(report);
         }
 
@@ -208,8 +228,8 @@ public class JdbcReportDao implements ReportDao {
 //    }
 
     public void updateLog(Report log) {
-        String sql = "UPDATE log SET content = ?, type = ?, date = ?, userid = ?, description = ?, exercise = ?, reps = ?, weight = ?, minutes = ?, title = ?, taskid = ? WHERE id = ?";
-        jdbcTemplate.update(sql, log.getContent(), log.getType(), log.getDate(), log.getuserid(), log.getDescription(), log.getExercise(), log.getReps(), log.getWeight(), log.getMinutes(), log.getTitle(), log.getTaskid(), log.getId());
+        String sql = "UPDATE log SET content = ?, type = ?, date = ?, userid = ?, description = ?, exercise = ?, reps = ?, weight = ?, minutes = ?, title = ?, taskid = ?, earnedpoints = ?, bounty = ? WHERE id = ?";
+        jdbcTemplate.update(sql, log.getContent(), log.getType(), log.getDate(), log.getuserid(), log.getDescription(), log.getExercise(), log.getReps(), log.getWeight(), log.getMinutes(), log.getTitle(), log.getTaskid(), log.getEarnedpoints(), log.getBounty(), log.getId());
     }
 
 
@@ -236,6 +256,8 @@ public class JdbcReportDao implements ReportDao {
         report.setMinutes(results.getInt("minutes"));
         report.setTitle(results.getString("title"));
         report.setTaskid(results.getInt("taskid"));
+        report.setEarnedpoints(results.getInt("earnedpoints"));
+        report.setBounty(results.getInt("bounty"));
         return report;
     }
 

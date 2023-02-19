@@ -8,6 +8,10 @@ public class Report {
 
     private int taskid;
 
+    private int bounty;
+
+    private int earnedpoints;
+
     private String title;
 
     private int userid;
@@ -26,7 +30,7 @@ public class Report {
     private int minutes;
 
 
-    public Report(int id, int userid, String content, String type, Timestamp date, String description, String exercise, int reps, int weight, int minutes, String title, int taskid) {
+    public Report(int id, int userid, String content, String type, Timestamp date, String description, String exercise, int reps, int weight, int minutes, String title, int taskid, int earnedpoints, int bounty) {
         this.id = id;
         this.userid = userid;
         this.content = content;
@@ -39,10 +43,28 @@ public class Report {
         this.minutes = minutes;
         this.title = title;
         this.taskid = taskid;
+        this.earnedpoints = earnedpoints;
+        this.bounty = bounty;
     }
 
     public Report(){
 
+    }
+
+    public int getBounty() {
+        return bounty;
+    }
+
+    public void setBounty(int bounty) {
+        this.bounty = bounty;
+    }
+
+    public int getEarnedpoints() {
+        return earnedpoints;
+    }
+
+    public void setEarnedpoints(int earnedpoints) {
+        this.earnedpoints = earnedpoints;
     }
 
     public String getTitle() {
