@@ -17,7 +17,7 @@
 //import DisplayButtons from '../components/DisplayButtons.vue'
 import InputSearch from '../components/InputSearch.vue'
 //import SearchDisplay from '../components/DisplaySearch.vue'
-import store from '../store/store'
+// import store from '../store/store'
 
 export default {
   components: { 
@@ -26,7 +26,7 @@ export default {
     InputSearch
   }, 
   name: "display",
-  store
+
 }
 
 </script>

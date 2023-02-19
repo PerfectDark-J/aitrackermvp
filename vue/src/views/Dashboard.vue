@@ -1,15 +1,17 @@
 <template>
    <span style="color: white; font-size: smaller;">
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto auto;">
-      <h1 style="grid-column: 1 / 4;">{{ dayOfWeek }}</h1>
-      <p style="grid-column: 4 / 5;">{{ formattedDate }} {{ formattedTime }}</p>
-      <!-- <p style="grid-column: 4 / 5;">{{ formattedTime }}</p> -->
-    </div>
-  </span>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto;">
+    <h1 style="grid-column: 1 / 4;">{{ dayOfWeek }}</h1>
+    <p style="grid-column: 4 / 5; padding-top: 10px;">{{ formattedDate }}<br>{{ formattedTime }}</p>
+  </div>
+</span>
+
+
+
   <div class="container">
     <div class="chart-container">
       <!-- Your chart goes here -->
-      <chart :filter="filter"/> 
+      <bar-chart /> 
     </div>
     
     <div class="bottom-half">
@@ -32,14 +34,18 @@
 import { useAuth0 } from '@auth0/auth0-vue';
 import ServerService from '../services/ServerService.js';
 import RightButtons from '../components/RightButtons.vue';
-import Chart from '../components/Chart.vue'; 
 import Tasks from '../views/TaskPage.vue'
+import BarChart from '../components/BarChart.vue'
 
+function convertToEST(utcDate) {
+  const estTime = utcDate.getTime() + (utcDate.getTimezoneOffset() * 60 * 1000) - (5 * 60 * 60 * 1000);
+  return new Date(estTime);
+}
 
 export default {
   name: "Dashboard",
   components: {
-    Chart,
+    BarChart,
     Tasks, 
     RightButtons
   },
@@ -50,21 +56,21 @@ export default {
       filter: null,
       userId: null,
       dayOfWeek: '',
-      currentDate: new Date()
+      currentDate: convertToEST(new Date())
     };
   },
   methods: {
     getDayOfWeek() {
       const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const today = new Date();
-      return daysOfWeek[today.getUTCDay()];
+      const today = convertToEST(new Date());
+      return daysOfWeek[today.getDay()];
     }
   },
   mounted() {
     this.dayOfWeek = this.getDayOfWeek();
      // Update the time every second
     setInterval(() => {
-      this.currentDate = new Date();
+      this.currentDate = convertToEST(new Date());
     }, 1000);
   },
 
@@ -84,6 +90,7 @@ export default {
       });
     }
   },
+
   created() {
       const auth0 = useAuth0()
 

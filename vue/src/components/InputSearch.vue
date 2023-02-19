@@ -175,7 +175,7 @@
 
 <!-- Success Message -->
 
-<div v-if="showSuccess" class="success-message" :style="{ animation: growAndFade }">
+  <div v-if="showSuccess" class="success-message" :style="{ animation: growAndFade }">
     {{ successMessage }}
   </div>
 
@@ -222,6 +222,7 @@ export default {
       };
       
       ServerService.updateLog(log)
+      this.displaySuccess('Updated')
       // For example, you could use axios to send a PUT request to the API endpoint for updating tasks
     },
     showTaskDetails(task) {
@@ -247,10 +248,14 @@ export default {
         // handle success
         //this.$router.go(0)
         this.deleteDialog = false
-        location.reload();
+        // this.search()
+        window.location.reload()
+        
+        
         
       })
       ServerService.deleteTask(taskId)
+      this.displaySuccess('Deleted')
       //this.search()
       .catch(error => {
         // handle error
@@ -265,6 +270,7 @@ export default {
     ServerService.completeTask(taskid)
     this.confirm = false; 
     location.reload();
+    this.displaySuccess('Completed')
     
     // ServerService.getTaskByTitle(title)
     // .then(response => {
@@ -281,9 +287,9 @@ export default {
       let description = 'empty'
       let exercise = 'empty'
       
-      const response = await axios.get(`https://ai-tracker-1.fly.dev/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
+      //const response = await axios.get(`https://ai-tracker-1.fly.dev/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
       //const response = await axios.get(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
-      //console.log(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`)
+      console.log(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`)
       
       // Store the response data in searchData
       this.searchData = response.data;
@@ -358,7 +364,7 @@ export default {
             comment: this.selectedResult.content
           };
           ServerService.updateTask(task)
-          this.displaySuccess('Updated')
+          this.displaySuccess('Saved')
 
       } else if (this.selectedResult.type === 'Workout') {
         console.log('save workout')
@@ -381,6 +387,7 @@ export default {
 
               console.log(workoutLog)
               ServerService.updateLog(workoutLog)
+              this.displaySuccess('Saved')
 
       } else {
         // Code for anything else
@@ -396,7 +403,7 @@ export default {
                 };
           console.log(entryLog)
           ServerService.updateLog(entryLog)
-          this.displaySuccess('Success!')
+          this.displaySuccess('Saved')
       
 
 

@@ -19,12 +19,13 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { faComment, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import store from './store/store'
+
 
 import App from './App.vue'
-import { Bar } from 'vue-chartjs'
 
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
+
+
 
 
 
@@ -37,8 +38,10 @@ const app = createApp(App);
 
 app.component('Datepicker', Datepicker);
 app.component('font-awesome-icon', FontAwesomeIcon);
-app.component('bar-chart', Bar)
-app.use(store);
+
+
+
+
 
 
 
@@ -51,6 +54,8 @@ const vuetify = createVuetify({
 library.add(faLink, faUser, faPowerOff, faHouse, faList, faTable, faPencil);
 library.add(faLink, faUser, faPowerOff, faHouse, faList, faTable, faStar);
 library.add(faComment, faPen, faPlus, faSearch);
+
+
 
 app
   .use(hljsVuePlugin)
@@ -69,4 +74,8 @@ app
   .use(vuetify)
   .component("font-awesome-icon", FontAwesomeIcon)
   .use(autoAnimatePlugin)
+
+
+    
+
   .mount("#app");

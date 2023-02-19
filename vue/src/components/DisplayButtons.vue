@@ -16,7 +16,7 @@
 
 <script>
 import InputSearch from './InputSearch.vue'
-import store from '../store/store'
+
 
 export default {
   name: 'display-buttons',

@@ -44,12 +44,17 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          
+          <div v-if="showSuccess" class="success-message" :style="{ animation: growAndFade }">
+            {{ successMessage }}
+          </div>
 </template>
 <script>
 import Service from '../services/ServerService'
 import { ref, onMounted } from "vue"
 import autoAnimate from "@formkit/auto-animate"
 import ServerService from '../services/ServerService'
+import anime from 'animejs'
 
 export default {
   
@@ -68,7 +73,9 @@ export default {
       selectedResult: {},
       selectedTask: {},
       showConfirmationDialog: false,
-      selectedTaskId: null
+      selectedTaskId: null,
+      showSuccess: false,
+      successMessage: '',
     }
   },
   computed: {
@@ -77,11 +84,30 @@ export default {
     }
   },
   methods: {
+    displaySuccess(message) {
+          this.successMessage = message;
+          this.showSuccess = true;
+            anime({
+            targets: '.success-message',
+            scale: [1, 1.5],
+            opacity: [1, 0],
+            easing: 'easeInQuad',
+            duration: 1000,
+            complete: () => {
+            this.showSuccess = false;
+            this.successMessage = "";
+          }
+          });
+          },
+    
     confirmCompletion(taskId) {
       this.selectedTaskId = taskId;
       //console.log('confirmCompletion ' + taskId + ' ' + task)
       //console.log(task)
+      
       this.showConfirmationDialog = true;
+      //this.displaySuccess('Completed')
+      
       },
     
     updateTask() {
@@ -91,6 +117,7 @@ export default {
       // console.log(this.selectedTask)
       // Add your code here to update the task in the database
       ServerService.updateTask(this.selectedTask)
+      
       
       const log = {
         type: this.selectedTask.taskdescription,
@@ -102,6 +129,7 @@ export default {
       };
       
       ServerService.updateLog(log)
+      this.displaySuccess('Updated')
       // For example, you could use axios to send a PUT request to the API endpoint for updating tasks
     },
     showTaskDetails(task) {
@@ -119,6 +147,7 @@ export default {
       task.taskisCompleted = true
       Service.completeTask(id)
       this.showConfirmationDialog = false;
+      this.displaySuccess('Completed')
     }
   })
   
@@ -165,6 +194,42 @@ export default {
   background-color: white;
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.success-message {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: green;
+  color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: growAndFade 1s ease-in-out forwards;
+}
+
+@keyframes growAndFade {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
 
 
 

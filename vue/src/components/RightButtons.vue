@@ -130,7 +130,7 @@
         
         <v-card-actions>
           <v-btn color="secondary" @click="showPopup = false">Cancel</v-btn>
-          <v-btn color="primary" @click="showPopup = false">Save</v-btn>
+          <v-btn color="primary" @click="saveItems">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -158,6 +158,12 @@
     </v-card>
   </v-dialog>
 
+  <!-- Success Message -->
+
+  <div v-if="showSuccess" class="success-message" :style="{ animation: growAndFade }">
+            {{ successMessage }}
+  </div>
+
  
 </template>
 
@@ -165,6 +171,7 @@
 <script>
 import TaskToggle from './TaskToggle.vue'
 import ServerService from '../services/ServerService'
+import anime from 'animejs'
 // import { User } from '@auth0/auth0-spa-js';
 // import { useAuth0 } from '@auth0/auth0-vue';
 
@@ -183,6 +190,8 @@ export default {
   },
   data() {
     return {
+      showSuccess: false,
+      successMessage: '',
       openPopup: false,
       showTask: false,
       showWorkout: false, 
@@ -212,15 +221,51 @@ export default {
     }
   },
   methods: {
+    displaySuccess(message) {
+          this.successMessage = message;
+          this.showSuccess = true;
+            anime({
+            targets: '.success-message',
+            scale: [1, 1.5],
+            opacity: [1, 0],
+            easing: 'easeInQuad',
+            duration: 1000,
+            complete: () => {
+            this.showSuccess = false;
+            this.successMessage = "";
+          }
+          });
+          },
+    
     incrementCount(index, amount) {
       this.counts[index] += amount;
     },
     setTaskType(type) {
     
     if(type === 'daily'){
-      this.isrecurring = true;  
+      this.isrecurring = true;
+      this.displaySuccess('Recurring')
     }
     },
+    saveItems() {
+      console.log('inside saveItems')
+      for (let i = 0; i < this.items.length; i++) {
+        
+        if (this.counts[i] !== 0) {
+          const log = {
+            userid: this.userId,
+            date: new Date(),
+            reps: this.counts[i],
+            type: this.items[i],
+          }
+          ServerService.createReport(log)
+          console.log(this.items[i], this.counts[i])
+          console.log(log)
+        }}
+        this.showPopup = false
+        this.displaySuccess("Updated")
+        
+        },
     saveTask() {
       const task = {
         tasktitle: this.tasktitle,
@@ -254,6 +299,7 @@ export default {
         };
      
         ServerService.createReport(report);
+        this.displaySuccess('Task Added')
       });
 
 
@@ -339,16 +385,14 @@ export default {
           ServerService.createReport(report).then(response => {
             console.log('success');
             console.log(report)
+            this.displaySuccess('Workout Created')
             }).catch(error => {
               console.log('failed');
               console.log(report)
             });
-
-            this.successMessage = "Saved Successfully!";
-            setTimeout(() => {
-              this.successMessage = '';
-            }, 2000);
-            this.openPopup = false;
+            this.dialog = false; 
+            this.displaySuccess('Workout Created')
+            
             location.reload();
         },
 
@@ -377,16 +421,18 @@ export default {
       const report = { title, content, type, date, userid, description, exercise, weight, reps, minutes };
       ServerService.createReport(report).then(response => {
         console.log('success');
+        //this.displaySuccess('Completed')
+        
       }).catch(error => {
         console.log('failed');
       });
+      this.displaySuccess('Created')
 
-      this.successMessage = "Saved Successfully!";
-      setTimeout(() => {
-        this.successMessage = '';
-      }, 2000);
-      this.openPopup = false;
-      location.reload();
+      
+      //this.openPopup = false;
+      this.dialog = false; 
+      //location.reload();
+      //this.displaySuccess('Saved')
     }
   },
     
@@ -509,6 +555,43 @@ v-card-actions {
     bottom:10px;
     
   }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.success-message {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: green;
+  color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: growAndFade 1s ease-in-out forwards;
+}
+
+@keyframes growAndFade {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
 
 
 </style>

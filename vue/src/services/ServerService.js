@@ -7,7 +7,7 @@ const http = axios.create({
 export default {
 
     verifyThroughEmail(email){
-        //return http.post('http://localhost:9000', email)
+       // return http.post('http://localhost:9000', email)
         return http.post('https://ai-tracker-1.fly.dev/', email)
     },
 
@@ -120,6 +120,10 @@ export default {
         let description = query.description; 
         let exercise = query.exercise; 
         return http.get('/logs', {params: {timeframe, type, description, exercise}})
+    },
+
+    getPoints(timeframe){
+        return http.get(`/getpoints?timeframe=${timeframe}`)
     },
 
     updateLog(report){
