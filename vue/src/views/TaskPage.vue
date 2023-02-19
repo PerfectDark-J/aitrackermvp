@@ -29,18 +29,19 @@
           style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px"
         >
           <v-btn
-            style="
-              height: 50px;
-              width: 75px;
-              background-color: blue;
-              color: white;
-              border: none;
-              border-radius: 5px;
-              font-size: 10px;
-            "
+            :style="{
+              height: '50px',
+              width: '75px',
+              backgroundColor: task.isroutine ? 'green' : 'blue',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              fontSize: '10px',
+            }"
             @click="confirmCompletion(task.id)"
-            >Complete</v-btn
           >
+            Complete
+          </v-btn>
         </div>
       </template>
 
@@ -78,14 +79,20 @@
       </v-card-title>
       <v-card-text>
         <p>Comment:</p>
-        <v-text-field
-          v-model="selectedTask.comment"
-          @change="updateTask(task)"
-        ></v-text-field>
+        <v-text-field v-model="selectedTask.comment"></v-text-field>
+        <p v-if="selectedTask.isroutine">Tasks:</p>
+        <ul v-if="selectedTask.isroutine" style="list-style: none">
+          <li
+            v-for="(task, index) in getSubTasks()"
+            :key="index"
+            @click="selectedTask.subtasks[index] = '<s>' + task + '</s>'"
+            v-html="task"
+          ></li>
+        </ul>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+      <v-card-actions class="justify-end">
+        <v-btn color="error" text @click="dialog = false">Cancel</v-btn>
+        <v-btn color="primary" text @click="saveTaskChanges">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -123,6 +130,7 @@ export default {
       selectedTaskId: null,
       showSuccess: false,
       successMessage: "",
+      subtasks: [],
     };
   },
   computed: {
@@ -131,6 +139,16 @@ export default {
     },
   },
   methods: {
+    async getSubTasks() {
+      try {
+        const subTasks = await ServerService.getSubTasks(this.selectedTask.id);
+        this.subtasks = subTasks.data;
+        console.log(subTasks)
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
     displaySuccess(message) {
       this.successMessage = message;
       this.showSuccess = true;
@@ -223,7 +241,6 @@ export default {
             setTimeout(() => {
               window.location.reload();
             }, 1000);
-
           });
         }
       });

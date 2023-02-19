@@ -84,6 +84,14 @@ export default {
         return http.post('/task', task)
     },
 
+    addSubtask(subtask){
+        return http.post('/subtasks', subtask)
+    },
+
+    getSubTasks(taskid){
+        return http.get(`/subtasks/${taskid}`)
+    },
+
     updateTask(task){
         return http.put(`/task`, task)
     },

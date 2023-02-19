@@ -186,6 +186,32 @@
     </v-card>
   </v-dialog>
 
+  <v-dialog v-model="dialog" max-width="600px">
+  <v-card>
+    <v-card-title>
+      <span class="headline">{{ selectedTask.tasktitle }}</span>
+    </v-card-title>
+    <v-card-text>
+      <p>Comment:</p>
+      <v-text-field
+        v-model="selectedTask.comment"
+      ></v-text-field>
+      <p v-if="selectedTask.isroutine">Tasks:</p>
+      <ul v-if="selectedTask.isroutine" style="list-style: none">
+        <li v-for="(task, index) in getSubTasks()" :key="index" 
+            @click="selectedTask.tasks[index] = '<s>' + task + '</s>'" 
+            v-html="task"></li>
+      </ul>
+    </v-card-text>
+    <v-card-actions class="justify-end">
+      <v-btn color="error" text @click="dialog = false">Cancel</v-btn>
+      <v-btn color="primary" text @click="saveTaskChanges">Save</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+
+
   <!-- Success Message -->
 
   <div
@@ -221,6 +247,10 @@ export default {
   data() {
     return {
       showSuccess: false,
+      routineTitle: "",
+      routineTextFields: [{ value: "" }],
+      tasks: [],
+      routineDialog: false,
       successMessage: "",
       openPopup: false,
       bounty: null,
@@ -260,6 +290,7 @@ export default {
       counts: Array(10).fill(0),
       tasktitle: "",
       isrecurring: false,
+      isroutine: false,
       selectedWorkout: null,
       workouts: ["Cardio", "Bench", "Squats", "Abs", "Pullups", "Pushups"],
       selectedCardioType: "",
@@ -268,6 +299,10 @@ export default {
     };
   },
   methods: {
+     
+    addRoutineTextField() {
+      this.routineTextFields.push({ value: "" });
+    },
     displaySuccess(message) {
       this.successMessage = message;
       this.showSuccess = true;
@@ -292,7 +327,11 @@ export default {
         this.isrecurring = true;
         this.displaySuccess("Recurring");
       } else if (type === "Routine") {
-      // code to be executed when setTaskType is set to "Routine"
+        this.showTask = false;
+        this.showPopup = false;
+        this.routineDialog = true;
+        this.routineDialogTitle = "Build Routine";
+        this.routineTextFields = [{ value: "" }];
       }
     },
 
@@ -345,12 +384,14 @@ export default {
       }
       this.showPopup = false;
       this.displaySuccess("Updated");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
     },
 
     saveTask() {
+      
+      
       const task = {
         tasktitle: this.tasktitle,
         comment: this.comment,
@@ -361,7 +402,7 @@ export default {
         taskisrecurring: this.isrecurring,
       };
 
-      console.log(task);
+     // console.log(task);
 
       ServerService.addTask(task)
         .then((response) => {
@@ -399,6 +440,64 @@ export default {
 
       this.showTask = false;
     },
+    
+    saveRoutine() {
+      const routine = {
+        tasktitle: this.routineTitle,
+        comment: this.comment,
+        taskcompletiondate: "",
+        taskdescription: "Routine",
+        taskiscompleted: false,
+        userid: this.userId,
+        taskisrecurring: true,
+        isroutine: true,
+      };
+
+        ServerService.addTask(routine)
+          .then((response) => {
+            ServerService.getMostRecentTaskId().then((response) => {
+              const taskid = response.data;
+
+        const report = {
+          userid: this.userId,
+          content: this.comment,
+          type: "Routine",
+          date: new Date(),
+          description: "Routine",
+          exercise: "",
+          weight: "",
+          reps: "",
+          minutes: "",
+          title: this.routineTitle,
+          taskid: taskid,
+          bounty: this.bounty,
+        };
+
+        ServerService.createReport(report);
+
+        
+        this.routineTextFields.forEach(field => {
+         const subtask = {
+            subtitle: field.value,
+            iscompleted: false,
+            taskid: taskid
+          };
+          console.log(subtask)
+          ServerService.addSubtask(subtask);
+        });
+
+        this.displaySuccess("Routine Added");
+      });
+    })
+    .catch((error) => {
+      console.log("FAILED");
+    });
+
+  this.routineDialog = false;
+},
+
+
+
     saveWorkout() {
       console.log("inside workout");
 
