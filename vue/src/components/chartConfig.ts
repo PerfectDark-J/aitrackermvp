@@ -23,7 +23,7 @@ export const data = {
     ],
     datasets: [
       {
-        label: 'Points Today',
+        label: 'Points Today' ,
         backgroundColor: '#f87979',
         data: []
       }

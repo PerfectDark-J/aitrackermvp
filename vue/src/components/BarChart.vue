@@ -1,5 +1,6 @@
 <template>
   <Bar :data="data" :options="options" />
+  
 </template>
 
 <script lang="ts">
@@ -24,7 +25,8 @@ export default {
   },
   data() {
     return chartConfig
-  }
+  },
+  
 }
 </script>
 

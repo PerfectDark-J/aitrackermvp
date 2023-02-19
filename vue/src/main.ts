@@ -66,8 +66,8 @@ app
       clientId: authConfig.clientId,
      
       authorizationParams: {
-        //redirect_uri: 'http://localhost:3000',
-        redirect_uri: 'https://luminous-figolla-dbc40d.netlify.app',
+        redirect_uri: 'http://localhost:3000',
+        //redirect_uri: 'https://luminous-figolla-dbc40d.netlify.app',
       }
     })
   )

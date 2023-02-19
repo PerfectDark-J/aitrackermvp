@@ -288,8 +288,8 @@ export default {
       let exercise = 'empty'
       
       //const response = await axios.get(`https://ai-tracker-1.fly.dev/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
-      //const response = await axios.get(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
-      console.log(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`)
+      const response = await axios.get(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`);
+      //console.log(`http://localhost:9000/logs?timeframe=${this.timeframe}&type=${this.type}&description=${description}&exercise=${exercise}`)
       
       // Store the response data in searchData
       this.searchData = response.data;
