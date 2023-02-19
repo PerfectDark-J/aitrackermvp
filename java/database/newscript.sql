@@ -37,6 +37,13 @@ CREATE TABLE log (
   taskid integer
 );
 
+CREATE TABLE subtask (
+  subtaskid SERIAL PRIMARY KEY,
+  taskid INTEGER,
+  subtitle VARCHAR(255),
+  iscompleted BOOLEAN
+);
+
 
 
 

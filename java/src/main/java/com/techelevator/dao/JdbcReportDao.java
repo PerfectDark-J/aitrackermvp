@@ -114,6 +114,16 @@ public class JdbcReportDao implements ReportDao {
         return workLogs;
     }
 
+    public Report getReportByTaskId(int taskid) {
+        String sql = "SELECT * FROM log WHERE taskid = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, taskid);
+        if (results.next()) {
+            return mapRowToLog(results);
+        } else {
+            return null;
+        }
+    }
+
     public List<Report> getLogs(String timeframe, String type, String description, String exercise) {
         System.out.println("Timeframe: " + timeframe);
         System.out.println("Type: " + type);
@@ -228,6 +238,10 @@ public class JdbcReportDao implements ReportDao {
 //    }
 
     public void updateLog(Report log) {
+        System.out.println("id: " + log.getId());
+        System.out.println("bounty: " + log.getBounty());
+        System.out.println("earned: " + log.getEarnedpoints());
+
         String sql = "UPDATE log SET content = ?, type = ?, date = ?, userid = ?, description = ?, exercise = ?, reps = ?, weight = ?, minutes = ?, title = ?, taskid = ?, earnedpoints = ?, bounty = ? WHERE id = ?";
         jdbcTemplate.update(sql, log.getContent(), log.getType(), log.getDate(), log.getuserid(), log.getDescription(), log.getExercise(), log.getReps(), log.getWeight(), log.getMinutes(), log.getTitle(), log.getTaskid(), log.getEarnedpoints(), log.getBounty(), log.getId());
     }
@@ -244,7 +258,7 @@ public class JdbcReportDao implements ReportDao {
 
     private Report mapRowToLog(SqlRowSet results) {
         Report report = new Report();
-        //report.setId(results.getInt("id"));
+        report.setId(results.getInt("id"));
         report.setContent(results.getString("content"));
         report.setType(results.getString("type"));
         report.setDate(results.getTimestamp("date"));

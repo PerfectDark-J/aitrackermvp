@@ -1,9 +1,12 @@
 package com.techelevator.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Task {
     private int id;
+
+    private boolean isroutine;
     private String tasktitle;
     private String taskdescription;
     private boolean taskiscompleted;
@@ -17,13 +20,15 @@ public class Task {
 
     private String comment;
 
+
+
     // Constructors
 
     public Task() {
 
     }
 
-    public Task(int id, String tasktitle, String taskdescription, boolean taskiscompleted, String taskcompletiondate, int userid, boolean taskisrecurring, String comment) {
+    public Task(int id, String tasktitle, String taskdescription, boolean taskiscompleted, String taskcompletiondate, int userid, boolean taskisrecurring, String comment, boolean isroutine) {
         this.id = id;
         this.tasktitle = tasktitle;
         this.taskdescription = taskdescription;
@@ -32,14 +37,25 @@ public class Task {
         this.userid = userid;
         this.taskisrecurring = taskisrecurring;
         this.comment = comment;
+        this.isroutine = isroutine;
     }
 
     public String getComment() {
         return comment;
     }
 
+
+
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public boolean isIsroutine() {
+        return isroutine;
+    }
+
+    public void setIsroutine(boolean isroutine) {
+        this.isroutine = isroutine;
     }
 
     public int getId() {

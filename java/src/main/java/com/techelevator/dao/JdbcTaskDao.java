@@ -1,12 +1,19 @@
 package com.techelevator.dao;
+import java.sql.Array;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.model.Task;
+
+import javax.sql.rowset.serial.SerialArray;
 
 @Component
 public class JdbcTaskDao implements TaskDao {
@@ -102,9 +109,11 @@ public class JdbcTaskDao implements TaskDao {
         return tasks;
     }
 
+    //get routine
+
     public void addTask(Task task) {
-        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid, taskisrecurring, comment) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTaskisCompleted(), task.getTaskcompletiondate(), task.getUserid(), task.isTaskisrecurring(), task.getComment() );
+        String sql = "INSERT INTO task (tasktitle, taskdescription, taskiscompleted, taskcompletiondate, userid, taskisrecurring, comment, isroutine) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTaskisCompleted(), task.getTaskcompletiondate(), task.getUserid(), task.isTaskisrecurring(), task.getComment(), task.isIsroutine() );
     }
 
 //    public Task getAllTasksByTaskId(int userId, int projectId, int taskId) {
@@ -128,8 +137,8 @@ public class JdbcTaskDao implements TaskDao {
         System.out.println(task.isTaskisrecurring());
         //System.out.println(task.getTasks);
 
-        String sql = "UPDATE task SET tasktitle = ?, taskdescription = ?, taskiscompleted = ?, taskcompletiondate = ?, userid = ?, comment = ?, taskisrecurring = ? WHERE taskid = ?";
-        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTaskisCompleted(), task.getTaskcompletiondate(), task.getUserid(), task.getComment(), task.isTaskisrecurring(), task.getId());
+        String sql = "UPDATE task SET tasktitle = ?, taskdescription = ?, taskiscompleted = ?, taskcompletiondate = ?, userid = ?, comment = ?, taskisrecurring = ?, isroutine = ? WHERE taskid = ?";
+        jdbcTemplate.update(sql, task.getTasktitle(), task.getTaskdescription(), task.isTaskisCompleted(), task.getTaskcompletiondate(), task.getUserid(), task.getComment(), task.isTaskisrecurring(), task.isIsroutine(), task.getId());
     }
 
     @Override
@@ -166,8 +175,15 @@ public class JdbcTaskDao implements TaskDao {
         task.setTaskcompletiondate(result.getString("taskcompletiondate"));
         task.setUserid(result.getInt("userid"));
         task.setComment(result.getString("comment"));
+        task.setIsroutine(result.getBoolean("isroutine"));
+
 
         return task;
     }
+
+
+
+
+
 }
 

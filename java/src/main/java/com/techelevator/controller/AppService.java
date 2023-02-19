@@ -1,12 +1,6 @@
 package com.techelevator.controller;
-import com.techelevator.dao.JdbcProjectDao;
-import com.techelevator.dao.JdbcReportDao;
-import com.techelevator.dao.JdbcTaskDao;
-import com.techelevator.dao.JdbcUserDao;
-import com.techelevator.model.Project;
-import com.techelevator.model.Report;
-import com.techelevator.model.Task;
-import com.techelevator.model.User;
+import com.techelevator.dao.*;
+import com.techelevator.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +27,9 @@ public class AppService {
 
         @Autowired
         private JdbcReportDao reportDao;
+
+        @Autowired
+        private JdbcSubtaskDao subtaskDao;
 
       /*  @PostMapping("/login")
         public User login(@RequestBody User user) {
@@ -276,6 +273,11 @@ public class AppService {
         return new ResponseEntity<>(report, HttpStatus.CREATED);
     }
 
+    @GetMapping("/log/{taskid}")
+    public ResponseEntity<Report> getReportByTaskId(@PathVariable int taskid) {
+        Report report = reportDao.getReportByTaskId(taskid);
+        return new ResponseEntity<>(report, HttpStatus.OK);
+    }
     @PutMapping("/log")
     public ResponseEntity<Report> updateReport(@RequestBody Report report) {
         reportDao.updateLog(report);
@@ -286,6 +288,16 @@ public class AppService {
     public ResponseEntity<Void> deleteReport(@PathVariable int logId) {
         reportDao.deleteReport(logId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/subtasks/{taskid}")
+    public List<Subtask> getAllSubtasksByTaskId(@PathVariable int taskid) {
+        return subtaskDao.getAllSubtasksByTaskId(taskid);
+    }
+
+    @PostMapping("/subtasks")
+    public void addSubtask(@RequestBody Subtask subtask) {
+        subtaskDao.addSubtask(subtask);
     }
 
     
